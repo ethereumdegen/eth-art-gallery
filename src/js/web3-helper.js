@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 //https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
-const tokenContractABI = require('../contracts/ERC20ABI.json')
+const tokenContractABI = require('../abi/ERC20ABI.json')
 const config = require('./config-0xbtc.js')
 
 const CryptoAssets = require ('./cryptoassets.js')
