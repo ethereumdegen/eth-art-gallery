@@ -65,16 +65,38 @@ var helper = {
 
     return tokenContract;
   },
-  async getTipjarContract(web3)
+  async getTipjarContractAddress()
   {
 
     var contractAddress = contractData.contracts.matic_network.TippingJar.address;
 
 
+    return contractAddress;
+  },
+  async getTipjarContract(web3)
+  {
+
+    var contractAddress = await this.getTipjarContractAddress()
+
     var tokenContract =  web3.eth.contract(tipjarContractABI).at(contractAddress)
 
     return tokenContract;
   },
+
+  async getTokensAllowance(tokenAddress, spender, ownerAddress)
+  {
+
+    var web3 = new Web3(config.child.RPC);
+
+
+    var tokenContract = new web3.eth.Contract(tokenContractABI, tokenAddress, {});
+
+
+    var allowance = await tokenContract.methods.allowance(spender,ownerAddress).call();
+
+    return allowance;
+  },
+
 
   async hasEnoughAllowance(acctAddress,assetName,swapAmountFormatted)
   {

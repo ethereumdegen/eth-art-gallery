@@ -29,10 +29,14 @@
 
         <div v-if="activeWalletDomain=='matic'">
 
-          <input type="text" v-model="depositAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+          <input @onkeyup="updateFormMode" type="text" v-model="depositAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
-          <button @click="depositToTipJar" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
-            Deposit To {{currentDomainName()}}
+          <button @click="approveToTipjar" v-if="!approvedEnoughToDeposit" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+            Approve To {{otherDomainName()}}
+          </button>
+
+          <button @click="depositToTipjar" v-if="approvedEnoughToDeposit" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+            Deposit To {{otherDomainName()}}
           </button>
 
 
@@ -69,6 +73,7 @@ export default {
 
       withdrawAmount:0,
       depositAmount:0,
+      approvedEnoughToDeposit: false,
 
       currentBalance: '0.0',
 
@@ -80,9 +85,11 @@ export default {
   mounted()
   {
 
-    this.updateAll();
-    setTimeout(this.updateFormMode, 2000);
+    //this.updateAll();
+  //  setTimeout(this.updateFormMode, 2000);
     setTimeout(this.updateBalance, 2000);
+
+    setInterval(this.updateFormMode, 6000);
   },
   updated()
   {
@@ -93,25 +100,24 @@ export default {
     updateAll()
     {
         console.log('form updated')
-      this.updateFormMode();
-      this.updateBalance();
+      // this.updateFormMode();
+       this.updateBalance();
     },
     currentDomainName(){
-      if(this.activeNetwork == "matic"){ return "Matic Network" }else{ return "Tip Jar" }
+      if(this.activeWalletDomain == "matic"){ return "Matic Network" }else{ return "Tip Jar" }
     },
     otherDomainName(){
-      if(this.activeNetwork == "matic"){ return "Tip Jar" }else{ return "Matic Network" }
+      if(this.activeWalletDomain == "matic"){ return "Tip Jar" }else{ return "Matic Network" }
     },
     checkNetworkProviderIdValid(){
 
-      if(this.activeNetwork == "ethereum")
-      {
-        if(this.providerNetworkID != Web3Helper.ethereumChainID())
+
+        if(this.providerNetworkID != Web3Helper.maticChainID())
         {
           this.networkProviderIdError = "Please switch your Web3 Provider to Ethereum Mainnet to call these methods."
           return false
         }
-      }
+
 
       //this.networkProviderIdError = null;
       return true;
@@ -119,6 +125,7 @@ export default {
     async updateBalance()
     {
 
+      console.log('update balance')
       if(this.activeWalletDomain == "tipjar"){
         var web3provider = new Web3(Web3.givenProvider || 'ws://localhost:8546');
         var userAddress = this.acctAddress;
@@ -157,18 +164,55 @@ export default {
 
 
         if(this.activeWalletDomain == "matic"){
+          //check to see how many are approved to the tipjar
+          var hasAllowance = Web3Helper.hasEnoughAllowance(this.acctAddress,this.assetName,this.depositAmount)
 
-
+          this.approvedEnoughToDeposit = hasAllowance;
         }
 
-        this.checkNetworkProviderIdValid()
+      //  this.checkNetworkProviderIdValid()
 
 
     },
 
+    async approveToTipjar()
+    {
+      console.log('approve to tip jar')
+      this.networkProviderIdError=null;
+
+
+      var web3 = window.web3
+      var userAddress = this.acctAddress;
+      var amt  = Web3Helper.formattedAmountToRaw(this.depositAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+
+      var tokenAddress = CryptoAssets.assets[this.assetName]['MaticContract']
+
+      if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
+
+        return;
+
+      }
+
+      var tipjarContractAddress = await Web3Helper.getTipjarContractAddress();
+
+      var tokenContract = await Web3Helper.getTokenContract(web3,tokenAddress,userAddress)
+
+      console.log(tipjarContractAddress,amt)
+
+      tokenContract.approve(tipjarContractAddress,amt).send()
+      .then(function(receipt){
+        console.log(receipt)
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
+
+
+    },
+
+
     async depositToTipjar()
     {
-      console.log('meep')
+      console.log('deposit to tip jar')
       this.networkProviderIdError=null;
 
 
@@ -190,8 +234,11 @@ export default {
 
       var tipjarContract = await Web3Helper.getTipjarContract(web3);
 
-      tipjarContract.withdrawTokens(tokenAddress,amt).send({from: userAddress})
+      console.log(tokenAddress,amt)
+
+      tipjarContract.depositTokens(tokenAddress,amt).send()
       .then(function(receipt){
+        console.log(receipt)
           // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
       });
 
