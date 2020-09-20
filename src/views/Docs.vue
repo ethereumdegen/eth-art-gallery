@@ -9,7 +9,7 @@
 
     			<div class="pl-4">
     				<a class="text-black text-base no-underline hover:no-underline font-extrabold text-xl"  href="#">
-    					0xBTC Matic Wallet
+    					Matic Tipjar
     				</a>
           </div>
 
@@ -38,10 +38,10 @@
 
 
             <div v-if="activeContent == 'purpose'">
-              <h3 class="text-lg"> 0xBTC Matic Wallet </h3>
+              <h3 class="text-lg"> Matic Tipjar </h3>
               <br>
 
-              <p> The purpose of this application ('The Dapp') is to provide a simple front-end user experience that allows users to transfer ERC20 tokens from the Ethereum Mainnet blockchain to the Matic blockchain, a 'Layer 2' network with lower transacting fees and higher bandwidth.  These tokens can also be moved back from the Matic chain back to Ethereum. </p>
+              <p> The purpose of this application ('The Dapp') is to provide a simple front-end user experience that allows users to receive and send tips using the Matic Network via a Discord Bot custodian. </p>
 
             </div>
 
