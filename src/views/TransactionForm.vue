@@ -20,7 +20,7 @@
           <input type="text" v-model="withdrawAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
 
-          <button  class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="withdrawFromTipjar" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Withdraw From {{currentDomainName()}}
           </button>
 
@@ -31,7 +31,7 @@
 
           <input type="text" v-model="depositAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
-          <button  class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="depositToTipJar" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Deposit To {{currentDomainName()}}
           </button>
 
@@ -166,105 +166,68 @@ export default {
 
     },
 
-    async standardApprove()
+    async depositToTipjar()
     {
-
+      console.log('meep')
       this.networkProviderIdError=null;
 
 
       var web3 = window.web3
       var userAddress = this.acctAddress;
-      var amt  = Web3Helper.formattedAmountToRaw(this.approveAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+      var amt  = Web3Helper.formattedAmountToRaw(this.depositAmount, CryptoAssets.assets[this.assetName]['Decimals']);
 
+      var tokenAddress = CryptoAssets.assets[this.assetName]['MaticContract']
 
+      if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
 
-      if(this.activeNetwork == "ethereum"){
-        if(this.providerNetworkID == 0x1){
+        return;
 
-          var contractAddress = CryptoAssets.assets[this.assetName]['EthereumContract'];
-
-
-          var tokenContract = await Web3Helper.getTokenContract(web3,contractAddress,userAddress);
-
-          tokenContract.approve(this.approveTo,amt).send({from: userAddress})
-          .then(function(receipt){
-              // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-          });
-
-        }else{
-          this.networkProviderIdError = "Please switch your Web3 Provider to Ethereum Mainnet to call this method."
-        }
       }
 
-      if(this.activeNetwork == "matic"){
-        if(this.providerNetworkID == 0x89){
-
-          var contractAddress = CryptoAssets.assets[this.assetName]['MaticContract'];
+      var contractAddress = CryptoAssets.assets[this.assetName]['MaticContract'];
 
 
-          var tokenContract = await Web3Helper.getTokenContract(web3,contractAddress,userAddress);
+      var tipjarContract = await Web3Helper.getTipjarContract(web3);
 
-          tokenContract.approve(this.approveTo,amt).send({from: userAddress})
-          .then(function(receipt){
-              // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-          });
+      tipjarContract.withdrawTokens(tokenAddress,amt).send({from: userAddress})
+      .then(function(receipt){
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
 
-        }else{
-          this.networkProviderIdError = "Please switch your Web3 Provider to Ethereum Mainnet to call this method."
-        }
-      }
+
     },
-    async standardTransfer()
+    async withdrawFromTipjar()
     {
+
       this.networkProviderIdError=null;
 
 
       var web3 = window.web3
       var userAddress = this.acctAddress;
+      var amt  = Web3Helper.formattedAmountToRaw(this.withdrawAmount, CryptoAssets.assets[this.assetName]['Decimals']);
 
-      var amt  = Web3Helper.formattedAmountToRaw(this.transferAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+      var tokenAddress = CryptoAssets.assets[this.assetName]['MaticContract']
 
+      if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
 
+        return;
 
-      if(this.activeNetwork == "ethereum"){
-        if(this.providerNetworkID == 0x1){
-
-          var contractAddress = CryptoAssets.assets[this.assetName]['EthereumContract'];
-
-
-          var tokenContract = await Web3Helper.getTokenContract(web3,contractAddress,userAddress);
-
-          console.log(tokenContract)
-          console.log('meep',tokenContract.methods)
-
-          tokenContract.transfer(this.approveTo,amt).send({from: userAddress})
-          .then(function(receipt){
-              // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-          });
-
-        }else{
-          this.networkProviderIdError = "Please switch your Web3 Provider to Ethereum Mainnet to call this method."
-        }
       }
 
-      if(this.activeNetwork == "matic"){
-        if(this.providerNetworkID == 0x89){
-
-          var contractAddress = CryptoAssets.assets[this.assetName]['MaticContract'];
+      var contractAddress = CryptoAssets.assets[this.assetName]['MaticContract'];
 
 
-          var tokenContract = await Web3Helper.getTokenContract(web3,contractAddress,userAddress);
-          tokenContract.transfer(this.approveTo,amt).send({from: userAddress})
-          .then(function(receipt){
-              // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-          });
+      var tipjarContract = await Web3Helper.getTipjarContract(web3);
 
-        }else{
-          this.networkProviderIdError = "Please switch your Web3 Provider to Ethereum Mainnet to call this method."
-        }
-      }
-    }
+      tipjarContract.depositTokens(tokenAddress,amt).send({from: userAddress})
+      .then(function(receipt){
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
 
+
+    },
 
 
   }

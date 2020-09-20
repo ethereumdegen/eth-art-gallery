@@ -6,7 +6,7 @@ module.exports = {
           },
           "matic_network":{
             "0xBitcoin":{"address":"0x71B821aa52a49F32EEd535fCA6Eb5aa130085978"},
-            "TippingJar":{"address":"0x8343e2AA8A5e3aA30512E9202603FAbf8147b3Dc"}
+            "TippingJar":{"address":"0xF46dc68dc638c188D65092e42bc6B554125a8FDA"}
           },
   }
 

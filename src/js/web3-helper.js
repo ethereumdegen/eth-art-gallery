@@ -65,6 +65,16 @@ var helper = {
 
     return tokenContract;
   },
+  async getTipjarContract(web3)
+  {
+
+    var contractAddress = contractData.contracts.matic_network.TippingJar.address;
+
+
+    var tokenContract =  web3.eth.contract(tipjarContractABI).at(contractAddress)
+
+    return tokenContract;
+  },
 
   async hasEnoughAllowance(acctAddress,assetName,swapAmountFormatted)
   {
@@ -88,7 +98,6 @@ var helper = {
 
     var web3 = new Web3(config.child.RPC);
 
-    console.log('contractData',contractData.contracts)
 
     var contractAddress = contractData.contracts.matic_network.TippingJar.address;
 
