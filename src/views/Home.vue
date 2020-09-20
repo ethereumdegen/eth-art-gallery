@@ -9,7 +9,7 @@
 
 			<div class="pl-4">
 				<a class="text-black text-base no-underline hover:no-underline font-extrabold text-xl"  href="#">
-					0xBTC Matic Wallet
+					Matic Tip Jar
 				</a>
       </div>
 
@@ -38,38 +38,38 @@
 
 				<ul class="flex m-6">
 					<li class="flex-1 mr-2">
-						<a @click="setNetwork('ethereum')" :class="network=='ethereum' ? 'bg-blue-500  text-white' : 'bg-transparent hover:border-gray-200 hover:bg-gray-200 text-gray-500'" class="text-center block border border-blue-500 rounded py-2 px-4 " href="#">Ethereum</a>
+						<a @click="setWalletDomain('tipjar')" :class="walletDomain=='tipjar' ? 'bg-purple-500  text-white' : 'bg-transparent hover:border-gray-200 hover:bg-gray-200 text-gray-500 border-purple-200'" class="text-center block border border-blue-500 rounded py-2 px-4 " href="#">Tip Jar</a>
 					</li>
 					<li class="flex-1 mr-2">
-						<a @click="setNetwork('matic')" :class="network=='matic' ? 'bg-blue-500  text-white' : 'bg-transparent hover:border-gray-200 hover:bg-gray-200 text-gray-500'" class="text-center block border border-blue-500 rounded py-2 px-4 " href="#">Matic</a>
+						<a @click="setWalletDomain('matic')" :class="walletDomain=='matic' ? 'bg-purple-500  text-white' : 'bg-transparent hover:border-gray-200 hover:bg-gray-200 text-gray-500 border-purple-200'" class="text-center block border border-blue-500 rounded py-2 px-4 " href="#">Matic</a>
 					</li>
 				</ul>
 
 
 				<div class="container mt-8">
 
-					<a href="#" @click="selectAsset('0xBTC')" :class="assetName=='0xBTC' ? 'bg-blue-400 text-white' : 'bg-transparent text-blue-700'" class="flex width-full  hover:bg-blue-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
+					<a href="#" @click="selectAsset('0xBTC')" :class="assetName=='0xBTC' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
 						<div class="text-md w-1/2"> 0xBTC </div>
 						<div class="text-md w-1/2 text-right">   </div>
 
 					</a>
 
-					<a href="#" @click="selectAsset('Dai')" :class="assetName=='Dai' ? 'bg-blue-400 text-white' : 'bg-transparent text-blue-700'" class="flex width-full  hover:bg-blue-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
+					<a href="#" @click="selectAsset('Dai')" :class="assetName=='Dai' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
 						<div class="text-md w-1/2"> Dai </div>
 						<div class="text-md w-1/2 text-right">   </div>
 
 					</a>
-					<a href="#" @click="selectAsset('Matic')" :class="assetName=='Matic' ? 'bg-blue-400 text-white' : 'bg-transparent text-blue-700'" class="flex width-full  hover:bg-blue-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
+					<a href="#" @click="selectAsset('Matic')" :class="assetName=='Matic' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
 						<div class="text-md w-1/2"> Matic </div>
 						<div class="text-md w-1/2 text-right">   </div>
 
 					</a>
-					<a href="#" @click="selectAsset('WETH')" :class="assetName=='WETH' ? 'bg-blue-400 text-white' : 'bg-transparent text-blue-700'" class="flex width-full  hover:bg-blue-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
+					<a href="#" @click="selectAsset('WETH')" :class="assetName=='WETH' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
 						<div class="text-md w-1/2"> WETH </div>
 						<div class="text-md w-1/2 text-right">   </div>
 
 					</a>
-					<a href="#" @click="selectAsset('Kiwi')" :class="assetName=='Kiwi' ? 'bg-blue-400 text-white' : 'bg-transparent text-blue-700'" class="flex width-full  hover:bg-blue-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
+					<a href="#" @click="selectAsset('Kiwi')" :class="assetName=='Kiwi' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
 						<div class="text-md w-1/2"> Kiwi </div>
 						<div class="text-md w-1/2 text-right">   </div>
 
@@ -88,7 +88,7 @@
 				<TransactionForm
 				ref="txform"
 				:acctAddress= "activeAccountAddress"
-				:activeNetwork= "network"
+				:activeWalletDomain= "walletDomain"
 				:providerNetworkID= "providerNetworkID"
 				:assetName= "assetName"
 				/>
@@ -128,7 +128,7 @@ export default {
   data () {
     return {
       activeAccountAddress: null,
-			network: 'ethereum',
+			walletDomain: 'tipjar',
 			providerNetworkID: null,
 			assetName: '0xBTC'
     }
@@ -173,9 +173,9 @@ export default {
 
 		 //this.updateBalances()
    },
-	 async setNetwork(networkName)
+	 async setWalletDomain(domainName)
 	 {
-		 this.network = networkName;
+		 this.walletDomain = domainName;
 
 		 // await this.updateBalances()
 
