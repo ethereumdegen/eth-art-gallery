@@ -67,11 +67,9 @@ export default {
   data() {
     return {
 
-      transferTo:null,
-      transferAmount:null,
-      approveTo:null,
-      approveAmount:null,
-      formMode: "none",
+      withdrawAmount:0,
+      depositAmount:0,
+
       currentBalance: '0.0',
 
       txError: null,
@@ -122,19 +120,24 @@ export default {
     {
 
       if(this.activeWalletDomain == "tipjar"){
-          //get balance in the tipjar contract
+        var web3provider = new Web3(Web3.givenProvider || 'ws://localhost:8546');
+        var userAddress = this.acctAddress;
+
+         var balanceRaw = await Web3Helper.getTipjarTokensBalance(
+          CryptoAssets.assets[this.assetName]['MaticContract'],
+          userAddress
+        )
+        this.currentBalance =  Web3Helper.rawAmountToFormatted(balanceRaw, CryptoAssets.assets[this.assetName]['Decimals']);
+
       }
 
       if(this.activeWalletDomain == "matic"){
         var web3provider = new Web3(Web3.givenProvider || 'ws://localhost:8546');
         var userAddress = this.acctAddress;
 
-        var maticClient = MaticHelper.getMaticPOSClient(web3provider,userAddress);
-        var balanceRaw = await maticClient.balanceOfERC20(
-          userAddress,
+         var balanceRaw = await Web3Helper.getMaticTokensBalance(
           CryptoAssets.assets[this.assetName]['MaticContract'],
-          {}
-
+          userAddress
         )
         this.currentBalance =  Web3Helper.rawAmountToFormatted(balanceRaw, CryptoAssets.assets[this.assetName]['Decimals']);
 
