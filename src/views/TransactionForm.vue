@@ -268,7 +268,7 @@ export default {
 
       var tipjarContract = await Web3Helper.getTipjarContract(web3);
 
-      tipjarContract.depositTokens(tokenAddress,amt).send({from: userAddress})
+      tipjarContract.withdrawTokens(tokenAddress,amt).send({from: userAddress})
       .then(function(receipt){
           // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
       });
