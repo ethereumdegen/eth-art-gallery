@@ -25,8 +25,12 @@
             <!-- <li>
               <a href="#" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">Profile</a>
             </li> -->
+
             <li>
-              <span   id="myAddr" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">{{acctAddress}}</span>
+              <a v-bind:href="'https://explorer.matic.network/address/'+acctAddress" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">{{acctAddress}}</a>
+            </li>
+            <li>
+              <a v-bind:href="'https://explorer.matic.network/address/'+contractAddress" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">View Contract In Explorer</a>
             </li>
             <hr>
             <li>
@@ -43,7 +47,7 @@ import Web3Helper from '../js/web3-helper.js'
 
 export default {
   name: 'MetamaskDropdown',
-  props: ['acctAddress','providerNetworkID'],
+  props: ['acctAddress','providerNetworkID','contractAddress'],
   data() {
     return {
       open: false

@@ -19,6 +19,7 @@
 					<MetamaskDropdown
             :acctAddress= "activeAccountAddress"
 						:providerNetworkID= "providerNetworkID"
+						:contractAddress="tipjarContractAddress"
           />
 				</div>
 			</div>
@@ -84,7 +85,9 @@
 
     </div>
     <div class="w-full lg:w-2/3 bg-gray-300 block ">
-
+			<div v-if="errorMessage" class="p-8 bg-red-200">
+				{{errorMessage}}
+			</div>
 			<div class="m-6 p-4 bg-gray-100">
 
 				<TransactionForm
@@ -132,19 +135,28 @@ export default {
       activeAccountAddress: null,
 			walletDomain: 'tipjar',
 			providerNetworkID: null,
-			assetName: '0xBTC'
+			assetName: '0xBTC',
+			tipjarContractAddress: null,
+			errorMessage: null
     }
   },
-  created () {
+  async created () {
 
 
      this.checkSignedIn()
 
 
-
 			if ( window.ethereum.selectedAddress) {
-				 Web3Helper.init();
+				 await Web3Helper.init();
+
+
+				 	this.tipjarContractAddress = await Web3Helper.getTipjarContractAddress()
+
 	      	this.readWeb3Data();  //opens the window
+
+					if(this.providerNetworkID != 0x89){
+		        this.errorMessage = "Please switch your Web3 Provider to Matic Mainnet (see Docs for help)."
+					}
 		 }
 
 
