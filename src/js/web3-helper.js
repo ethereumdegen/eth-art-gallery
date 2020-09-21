@@ -2,7 +2,7 @@
 
 //https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
 const tokenContractABI = require('../abi/MaticERC20ABI.json')
-const tipjarContractABI = require('../abi/TippingJar.json')
+const invaderContractABI = require('../abi/InvaderToken.json')
 const config = require('./config-0xbtc.js')
 
 const contractData = require('../contracts/contractdata.js')
@@ -74,10 +74,10 @@ var helper = {
 
     return tokenContract;
   },
-  async getTipjarContractAddress()
+  async getInvaderontractAddress()
   {
 
-    var contractAddress = contractData.contracts.matic_network.TippingJar.address;
+    var contractAddress = contractData.contracts.matic_network.InvaderToken.address;
 
 
     return contractAddress;
@@ -87,7 +87,7 @@ var helper = {
 
     var contractAddress = await this.getTipjarContractAddress()
 
-    var tokenContract =  web3.eth.contract(tipjarContractABI).at(contractAddress)
+    var tokenContract =  web3.eth.contract(invaderContractABI).at(contractAddress)
 
     return tokenContract;
   },
@@ -145,22 +145,22 @@ var helper = {
 
 
   },
-  async getTipjarTokensBalance( tokenAddress, ownerAddress)
+/*  async getTipjarTokensBalance( tokenAddress, ownerAddress)
   {
 
     var web3 = new Web3(Web3.givenProvider);
 
 
-    var contractAddress = contractData.contracts.matic_network.TippingJar.address;
+    var contractAddress = contractData.contracts.matic_network.InvaderToken.address;
 
 
-    var tipjarContract = new web3.eth.Contract(tipjarContractABI, contractAddress, {});
+    var tipjarContract = new web3.eth.Contract(invaderContractABI, contractAddress, {});
 
 
     var balance = await tipjarContract.methods.getBalance(tokenAddress,ownerAddress).call();
 
     return balance;
-  },
+  },*/
 
   async getMaticTokensBalance(contractAddress, ownerAddress)
   {

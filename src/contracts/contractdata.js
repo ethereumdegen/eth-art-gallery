@@ -4,7 +4,7 @@ module.exports = {
           "ethereum_network":{
           },
           "matic_network":{
-            "TippingJar":{"address":"0x91cdF51E0B06fd0e30A4199a5D572c89FDB9A4ee"}
+            "InvaderToken":{"address":"0xb543a2b5d7795855433Dd7A6B7662CcC41e8e68a"}
           },
   }
 
