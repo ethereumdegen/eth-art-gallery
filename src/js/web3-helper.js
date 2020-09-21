@@ -83,7 +83,7 @@ var helper = {
     return tokenContract;
   },*/
 
-  async getTokensAllowance(tokenAddress, spender, ownerAddress)
+  async getTokensAllowance(tokenAddress, ownerAddress, spender )
   {
 
     var web3 = new Web3(Web3.givenProvider);
@@ -91,17 +91,20 @@ var helper = {
 
     console.log('get token allowance', tokenAddress)
   //    var tokenContract = await this.getTokenContract(web3, tokenAddress);
-  var tokenContract = new web3.eth.Contract(tokenContractABI,tokenAddress)
+    var tokenContract = new web3.eth.Contract(tokenContractABI,tokenAddress)
 
 
 
     console.log('meep',tokenContract,spender,ownerAddress)
 
-    var allowance = await new Promise((resolve, reject) => {
-      //tipjarContract.methods.getBalance( tokenAddress , ownerAddress).call();
+    var allowance =0
+
+     await new Promise((resolve, reject) => {
 
      tokenContract.methods.allowance( ownerAddress, spender).call( {}  )
       .then(function(result){
+        console.log('we got ', result)
+        allowance = result;
         resolve(result);
       })
       .catch(function(err){
@@ -113,7 +116,7 @@ var helper = {
 
   //  console.log('get allowance .. promise',tokenAddress,spender,ownerAddress)
   //  var allowance = new Promise tokenContract.methods.allowance(spender,ownerAddress).call();
-    console.log('allowance',allowance)
+    console.log('allowance!!! ',allowance)
     return allowance;
   },
 
