@@ -35,6 +35,15 @@ var helper = {
       // We recommend reloading the page, unless you must do otherwise
       window.location.reload();
     }
+
+
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+      // For now, 'eth_accounts' will continue to always return an array
+      function handleAccountsChanged(accounts) {
+        window.location.reload();
+      }
+
   },
 
   ethereumChainID()
