@@ -154,7 +154,10 @@ export default {
 
 	      	this.readWeb3Data();  //opens the window
 
-					if(this.providerNetworkID != 0x89){
+					var netId = await Web3Helper.getProviderNetworkID()
+
+
+				  if(netId != 0x89){
 		        this.errorMessage = "Please switch your Web3 Provider to Matic Mainnet (see Docs for help)."
 					}
 		 }
