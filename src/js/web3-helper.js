@@ -73,15 +73,15 @@ var helper = {
 
     return contractAddress;
   },
-  /*async getTipjarContract(web3)
+  async getTipjarContract(web3)
   {
 
     var contractAddress = await this.getTipjarContractAddress()
 
-    var tokenContract =  new web3.eth.Contract(tipjarContractABI,contractAddress)
+    var tokenContract =  web3.eth.contract(tipjarContractABI).at(contractAddress)
 
     return tokenContract;
-  },*/
+  },
 
   async getTokensAllowance(tokenAddress, ownerAddress, spender )
   {
