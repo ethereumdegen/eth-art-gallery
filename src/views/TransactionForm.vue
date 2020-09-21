@@ -17,17 +17,15 @@
         <div v-if="assetName=='AlienToken'">
 
 
-          <div class="my-6 p-6 bg-green-500 w-full text-sm">
+          <div class=" p-2 bg-green-500 w-full text-sm">
 
-          <input type="text" v-model="unstakeAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+            <div class="p-4 text-md w-full text-center">
 
-          <span> Staked Invader Balance: {{ stakedInvader()  }}</span>
+              <div> Estimated Alien Earnings: {{ estimatedAlienEarnings  }}</div>
+            </div>
 
-          <span> Estimated Alien Earnings: {{ estimatedAlienEarnings  }}</span>
 
-          <button @click="unstakeFromAlien" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
-            Unstake Invader
-          </button>
+
 
 
           <br>
@@ -40,13 +38,18 @@
 
           </div>
 
-          <div class="p-6 bg-gray-500 w-full text-sm">
+          <div class="p-2 my-2 bg-gray-500 w-full text-sm">
 
-          <input type="text" v-model="withdrawAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+            <div class="p-4 text-md w-full text-center">
+              <div> Staked Invader Balance: {{ stakedInvader  }}</div>
+
+            </div>
+
+            <input type="text" v-model="unstakeAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
 
-          <button @click="withdrawFromInvader" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
-            Withdraw From Invader
+          <button @click="unstakeFromAlien" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+            Unstake Invader
           </button>
 
           </div>
@@ -74,7 +77,7 @@
 
 
           <button @click="withdrawFromInvader" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
-            Withdraw From Invader
+            Withdraw LP Token From Invader
           </button>
 
           </div>
@@ -131,7 +134,9 @@ export default {
 
       stakeAmount: 0,
       unstakeAmount: 0,
+
       estimatedAlienEarnings: 0,
+      stakedInvader:0,
 
 
       currentBalance: '0.0',
@@ -171,9 +176,8 @@ export default {
     getAssetNickname(){
        return CryptoAssets.assets[this.assetName]['Nickname'];
     },
-    async stakedInvader(){
-       return 0;
-    },
+
+
     checkNetworkProviderIdValid(){
 
 
