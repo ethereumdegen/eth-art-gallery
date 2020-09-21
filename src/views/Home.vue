@@ -118,7 +118,7 @@ import Web3Helper from '../js/web3-helper.js'
 import CryptoAssets from '../js/cryptoassets.js'
 import MaticHelper from '../js/matic-helper.js'
 
-const Web3 = require('web3');
+//const Web3 = require('web3');
 
 
 

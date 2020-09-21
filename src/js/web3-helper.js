@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 //https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
-const tokenContractABI = require('../abi/ERC20ABI.json')
+const tokenContractABI = require('../abi/MaticERC20ABI.json')
 const tipjarContractABI = require('../abi/TippingJar.json')
 const config = require('./config-0xbtc.js')
 
@@ -58,10 +58,10 @@ var helper = {
     console.log('net id is', net_id)
     return net_id;
   },
-  async getTokenContract(web3, contractAddress, fromAddress)
+  async getTokenContract(web3, contractAddress)
   {
 
-    var tokenContract =  web3.eth.contract(tokenContractABI).at(contractAddress)
+    var tokenContract = web3.eth.contract(tokenContractABI).at(contractAddress)
 
     return tokenContract;
   },
@@ -73,52 +73,70 @@ var helper = {
 
     return contractAddress;
   },
-  async getTipjarContract(web3)
+  /*async getTipjarContract(web3)
   {
 
     var contractAddress = await this.getTipjarContractAddress()
 
-    var tokenContract =  web3.eth.contract(tipjarContractABI).at(contractAddress)
+    var tokenContract =  new web3.eth.Contract(tipjarContractABI,contractAddress)
 
     return tokenContract;
-  },
+  },*/
 
   async getTokensAllowance(tokenAddress, spender, ownerAddress)
   {
 
-    var web3 = new Web3(config.child.RPC);
+    var web3 = new Web3(Web3.givenProvider);
 
 
-    var tokenContract = new web3.eth.Contract(tokenContractABI, tokenAddress, {});
+    console.log('get token allowance', tokenAddress)
+  //    var tokenContract = await this.getTokenContract(web3, tokenAddress);
+  var tokenContract = new web3.eth.Contract(tokenContractABI,tokenAddress)
 
 
-    var allowance = await tokenContract.methods.allowance(spender,ownerAddress).call();
 
+    console.log('meep',tokenContract,spender,ownerAddress)
+
+    var allowance = await new Promise((resolve, reject) => {
+      //tipjarContract.methods.getBalance( tokenAddress , ownerAddress).call();
+
+     tokenContract.methods.allowance( ownerAddress, spender).call( {}  )
+      .then(function(result){
+        resolve(result);
+      })
+      .catch(function(err){
+        console.error(err)
+        reject(err)
+      })
+    });
+
+
+  //  console.log('get allowance .. promise',tokenAddress,spender,ownerAddress)
+  //  var allowance = new Promise tokenContract.methods.allowance(spender,ownerAddress).call();
+    console.log('allowance',allowance)
     return allowance;
   },
 
 
-  async hasEnoughAllowance(acctAddress,assetName,swapAmountFormatted)
+  async hasEnoughAllowance(acctAddress,spenderAddress,assetName,requestedDepositAmountFormatted)
   {
+    console.log('hasEnoughAllowance',acctAddress,spenderAddress,assetName,requestedDepositAmountFormatted)
 
-        var numApproved = await this.getTokensAllowance(CryptoAssets.assets[assetName]['EthereumContract'], CryptoAssets.assets[assetName]['EthereumPredicateContract'],acctAddress )
-
-
-        console.log('num swapping ', swapAmountFormatted)
+        var numApproved = await this.getTokensAllowance(CryptoAssets.assets[assetName]['MaticContract'], acctAddress ,spenderAddress)
 
         var numApprovedFormatted = this.rawAmountToFormatted(numApproved,CryptoAssets.assets[assetName]['Decimals'])
 
           console.log('num Approved ',assetName, numApproved)
           console.log('num Approved f ', numApprovedFormatted)
 
-      return  ( parseFloat(numApprovedFormatted) > parseFloat(swapAmountFormatted) )
+      return  ( parseFloat(numApprovedFormatted) > parseFloat(requestedDepositAmountFormatted) )
 
 
   },
   async getTipjarTokensBalance( tokenAddress, ownerAddress)
   {
 
-    var web3 = new Web3(config.child.RPC);
+    var web3 = new Web3(Web3.givenProvider);
 
 
     var contractAddress = contractData.contracts.matic_network.TippingJar.address;
@@ -135,7 +153,7 @@ var helper = {
   async getMaticTokensBalance(contractAddress, ownerAddress)
   {
 
-    var web3 = new Web3(config.child.RPC);
+    var web3 = new Web3(Web3.givenProvider);
 
 
     var tokenContract = new web3.eth.Contract(tokenContractABI, contractAddress, {});
