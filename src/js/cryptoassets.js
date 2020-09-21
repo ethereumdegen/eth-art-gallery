@@ -27,7 +27,7 @@ module.exports = {
     "AlienToken": {
       "Nickname":"Alien",
       "Decimals": 18,
-      "MaticContract": ""
+      "MaticContract": "0xb51b25eA2319E15Aeb2C38C03E83F6e92A9Aeae3"
     }
 
 
