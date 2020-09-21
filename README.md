@@ -16,3 +16,8 @@ npm run dev
 npm run build
 npm run server
 ```
+
+
+### Dev TODO
+
+* add rate limiting (max of 10 tips per 10 minutes)
