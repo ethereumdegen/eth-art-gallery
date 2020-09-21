@@ -82,14 +82,14 @@ var helper = {
 
     return contractAddress;
   },
-  async getTipjarContract(web3)
+  async getInvaderContract(web3)
   {
 
-    var contractAddress = await this.getTipjarContractAddress()
+    var contractAddress = await this.getInvaderContractAddress()
 
-    var tokenContract =  web3.eth.contract(invaderContractABI).at(contractAddress)
+    var contract =  web3.eth.contract(invaderContractABI).at(contractAddress)
 
-    return tokenContract;
+    return contract;
   },
 
   async getTokensAllowance(tokenAddress, ownerAddress, spender )

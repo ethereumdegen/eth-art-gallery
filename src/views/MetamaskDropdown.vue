@@ -7,7 +7,7 @@
         <img v-if="providerNetworkID==0x1" src="@/assets/img/ethereum-logo-wireframe.png" alt="ETH avatar" class="rounded-full h-8 w-5">
         <img v-if="providerNetworkID==0x89" src="@/assets/img/maticlogo.png" alt="Matic avatar" class="rounded-full h-8 w-6">
 
-        <span class="ml-2 font-medium truncate" style="max-width:80px">{{acctAddress}}</span>
+        <span class="ml-2 font-medium truncate text-white" style="max-width:80px">{{acctAddress}}</span>
         <svg class="ml-1 h-5 w-5 fill-current text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z"/>
         </svg>

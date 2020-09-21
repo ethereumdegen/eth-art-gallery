@@ -65,35 +65,16 @@
 						<div class="text-md w-1/2 text-right">   </div>
 					</a>
 
+
+<!--
 					<a href="#" @click="selectAsset('0xBTC')" :class="assetName=='0xBTC' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
 						<div class="text-md w-1/2"> 0xBTC </div>
 						<div class="text-md w-1/2 text-right">   </div>
 
 					</a>
+-->
 
-
-					<!--
-					<a href="#" @click="selectAsset('Dai')" :class="assetName=='Dai' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> Dai </div>
-						<div class="text-md w-1/2 text-right">   </div>
-
-					</a>
-					<a href="#" @click="selectAsset('Matic')" :class="assetName=='Matic' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> Matic </div>
-						<div class="text-md w-1/2 text-right">   </div>
-
-					</a>
-					<a href="#" @click="selectAsset('WETH')" :class="assetName=='WETH' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> WETH </div>
-						<div class="text-md w-1/2 text-right">   </div>
-
-					</a>
-					<a href="#" @click="selectAsset('Kiwi')" :class="assetName=='Kiwi' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> Kiwi </div>
-						<div class="text-md w-1/2 text-right">   </div>
-
-					</a>
-				-->
+					 
 
 				</div>
 
@@ -152,7 +133,7 @@ export default {
       activeAccountAddress: null,
 			walletDomain: 'matic',
 			providerNetworkID: null,
-			assetName: '0xBTC',
+			assetName: '0xBTC_LP_Token',
 			invaderContractAddress: null,
 			errorMessage: null
     }
