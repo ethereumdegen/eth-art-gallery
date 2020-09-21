@@ -127,18 +127,7 @@ export default {
     async updateBalance()
     {
 
-      console.log('update balance')
-      if(this.activeWalletDomain == "tipjar"){
-        var web3provider = new Web3(Web3.givenProvider || 'ws://localhost:8546');
-        var userAddress = this.acctAddress;
-
-         var balanceRaw = await Web3Helper.getTipjarTokensBalance(
-          CryptoAssets.assets[this.assetName]['MaticContract'],
-          userAddress
-        )
-        this.currentBalance =  Web3Helper.rawAmountToFormatted(balanceRaw, CryptoAssets.assets[this.assetName]['Decimals']);
-
-      }
+     
 
       if(this.activeWalletDomain == "matic"){
         var web3provider = new Web3(Web3.givenProvider || 'ws://localhost:8546');

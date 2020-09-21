@@ -74,7 +74,7 @@ var helper = {
 
     return tokenContract;
   },
-  async getInvaderontractAddress()
+  async getInvaderContractAddress()
   {
 
     var contractAddress = contractData.contracts.matic_network.InvaderToken.address;
