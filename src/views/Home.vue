@@ -10,9 +10,13 @@
 			<img  src="@/assets/img/invader_sm.png" alt="ETH avatar" class="rounded-full h-6 w-6 inline-block">
 
 
-			<a class="text-green-400 text-glow text-base no-underline hover:no-underline font-extrabold text-xl"  href="#">
+			<a class="text-green-400 text-glow text-base hover:text-white no-underline hover:no-underline font-extrabold text-xl"  href="#">
 				Invader.Finance
 			</a>
+
+
+				  <router-link class="text-green-400 text-glow text-base no-underline hover:no-underline mx-6 text-md" to="/docs">Docs</router-link>
+
 		</div>
 
 			<div class="  flex items-center w-auto mt-2 lg:mt-0 bg-grey-lightest md:bg-transparent z-20" id="nav-content">

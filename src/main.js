@@ -3,8 +3,8 @@ import PortalVue from 'portal-vue'
 import App from './App.vue'
 import router from './router'
 
-import './main.css'
-
+import './css/main.css'
+import './css/github-markdown.css'
 
 Vue.config.productionTip = false
 

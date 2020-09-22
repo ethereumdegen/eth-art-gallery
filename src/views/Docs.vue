@@ -1,67 +1,65 @@
 <template>
-  <div class="about">
+  <div class="bg-gray-800" >
+
+      <Navbar />
+
 
     <nav id="header" class="w-full z-10 pin-t">
 
-    	<div id="progress" class="h-1 z-20 pin-t" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
 
     		<div class="w-full mx-auto flex flex-wrap items-center justify-between mt-0 py-3 bg-white px-4">
 
     			<div class="pl-4">
     				<a class="text-black text-base no-underline hover:no-underline font-extrabold text-xl"  href="#">
-    					Matic Tipjar
+    					Invader.Finance Documentation
     				</a>
           </div>
 
+          <a @click="docNavOpen=!docNavOpen" href="#">
+            <svg
+
+              class="h-6 w-6 block lg:hidden"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </a>
 
 
     		</div>
+
+        <div class="w-full " v-if="docNavOpen">
+
+          <DocumentationNav
+
+          :setContentCallback="setContent"
+
+          />
+
+        </div>
     	</nav>
 
 
 
 
       <div class="lg:flex mb-4">
-        <div class="w-full lg:w-1/3 bg-gray-300 overflow-y-scroll ">
-          <div class="m-6 p-4 bg-gray-100">
+        <div class="w-full lg:w-1/3 bg-gray-300   hidden lg:block ">
 
-            <ul>
-              <li class="text-lg text-gray-500"> Getting Started </li>
-              <li> <a href="#" @click="setContent('purpose')"> Purpose Statement </a> </li>
-              <li> <a href="#" @click="setContent('connecting')"> Connecting with Metamask </a> </li>
-           </ul>
+          <DocumentationNav
 
-          </div>
+          :setContentCallback="setContent"
+
+          />
+
+
         </div>
         <div class="w-full lg:w-2/3 bg-gray-300  ">
           <div class="m-6 p-4 bg-gray-100">
 
-
-            <div v-if="activeContent == 'purpose'">
-              <h3 class="text-lg"> Invader Finance </h3>
-              <br>
-
-              <p> Invader Finance allows users to stake their 0xBTC/Matic Liquidity Pool tokens (LP Tokens) From Maticswap and earn Farm tokens from them called 'Aliens'. </p>
-
-            </div>
-
-            <div v-if="activeContent == 'connecting'">
-              <h3 class="text-lg"> Getting Connected </h3>
-              <br>
-
-              <p> To connect to this Dapp, you will need a Web3 compatible browser or extension such as Metamask. (<a href="https://metamask.io" target="_blank" >https://metamask.io</a>)    </p>
-              <br>
-              <p> Once you have installed Metamask, you will need to add a Custom RPC for the Matic Network so that you will be able to digitally sign transactions for the Matic Network.   To do this, click on the 'Networks' dropdown at the very top of Metamask and change it from 'Main Ethereum Network' to 'Custom RPC' and use the following information: </p>
-                <br>
-                <ul>
-                  <li> Network Name: "Matic Network"</li>
-                  <li> New RPC URL: "https://rpc-mainnet.matic.network"</li>
-                  <li> Chain ID: "137" </li>
-                  <li> Symbol: "M" </li>
-                  <li> Block Explorer URL: "https://explorer.matic.network" </li>
-                </ul>
-                <br>
-                <p> Once you have added the Matic Network information to Metamask, switch Metamask back to 'Ethereum Mainnet Network'.  During the use of the Dapp, you may be asked to switch over to the 'Matic Mainnet Network' when you intend to digitally sign transactions for the Matic Network and now you are prepared to do so.  </p>
+            <div class="markdown markdown-body" v-html="rawContent">
+                ---
             </div>
 
 
@@ -73,27 +71,83 @@
         </div>
       </div>
 
-
+  <Footer/>
 
   </div>
 </template>
 
 
 <script>
+ import  MarkdownIt  from 'markdown-it';
+import * as http from 'http';
+import hljs from 'highlight.js'
+
+import DocumentationNav from './components/DocumentationNav.vue';
+
 
 export default {
   name: 'Docs',
   props: [],
+  components: { DocumentationNav },
   data() {
     return {
-      activeContent: 'purpose'
+      docNavOpen: false,
+      activeContent: '',
+      rawContent: ''
     }
   },
   methods: {
 
     setContent (contentName) {
       console.log('set content', contentName)
-      this.activeContent = contentName;
+      //this.activeContent = contentName;
+
+
+      var self = this;
+
+      var options = {
+        path: '/documents/'+contentName+'.md'
+      };
+
+      var md = new MarkdownIt({
+        highlight: function (str, lang) {
+          if (lang && hljs.getLanguage(lang)) {
+            try {
+              return hljs.highlight(lang, str).value;
+            } catch (__) {}
+          }
+
+          return ''; // use external default escaping
+        }
+      });
+
+      http.get(options, function(res) {
+
+        let data = '';
+
+        // A chunk of data has been recieved.
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        // The whole response has been received. Print out the result.
+        res.on('end', () => {
+
+
+               var result = md.render(data);
+               console.log( result )
+
+               self.rawContent = result;
+
+
+        });
+
+
+
+      }).on('error', function(e) {
+        console.log("Got error: " + e.message);
+      });
+
     }
   }
 }
