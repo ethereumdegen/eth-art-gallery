@@ -5,17 +5,11 @@ const config={
       {"title":"Welcome","id":"welcome"},
       {"title":"Getting Started with Matic","id":"matic"},
     ]},
-    {"title":"Bridge to Matic","rows":[
-      {"title":"How to Mine 0xBTC","id":"howtomine"},
-      {"title":"How EIP918 Mining Works","id":"eip918"}
+    {"title":"Using Invader Finance","rows":[
+      {"title":"0xBTC LP Token","id":"lptoken"},
+      {"title":"How to earn ALIENs","id":"aliens"}
     ]},
-    {"title":"Layer 2 Networks","hidden":true,"rows":[
-      {"title":"What is a Layer 2 Network?","id":"layer2"},
-      {"title":"Matic Network","id":"maticnetwork"}
-    ]},
-    {"title":"Misc","rows":[
-      {"title":"History of 0xBTC","id":"history"}
-    ]}
+
 
 
   ]
