@@ -48,7 +48,7 @@
             <input type="text" v-model="unstakeAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
 
-          <button @click="unstakeFromAlien" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="unstakeInvaderFromAlien" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Unstake Invader
           </button>
 
@@ -61,9 +61,13 @@
 
           <div class="my-6 p-6 bg-green-500 w-full text-sm">
 
-          <input type="text" v-model="stakeAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+          <input type="text" v-model="stakeAmount" v-on:keyup="updateFormMode" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
-          <button @click="stakeToAlien" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="approveInvaderToAlien" v-if="!approvedEnoughToDeposit" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+            Approve Invader To Stake
+          </button>
+
+          <button @click="stakeInvaderToAlien" v-if="approvedEnoughToDeposit" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Stake Invader to Farm Aliens
           </button>
 
@@ -229,6 +233,24 @@ export default {
           this.approvedEnoughToDeposit = hasAllowance;
         }
 
+
+
+        if(this.assetName == "InvaderToken"){
+          //check to see how many are approved to alien
+          console.log('has enough allowance?', this.acctAddress,this.assetName,this.stakeAmount)
+
+          var spenderAddress = await Web3Helper.getAlienContractAddress();
+
+          var amt = this.stakeAmount;
+
+          var hasAllowance = await Web3Helper.hasEnoughAllowance(this.acctAddress,spenderAddress,this.assetName,amt)
+
+          this.approvedEnoughToDeposit = hasAllowance;
+        }
+
+
+
+
       //  this.checkNetworkProviderIdValid()
 
 
@@ -308,7 +330,6 @@ export default {
 
       this.networkProviderIdError=null;
 
-
       var web3 = window.web3
       var userAddress = this.acctAddress;
       var amt  = Web3Helper.formattedAmountToRaw(this.withdrawAmount, CryptoAssets.assets[this.assetName]['Decimals']);
@@ -334,11 +355,59 @@ export default {
 
 
     },
-    async stakeToAlien()
+    async approveInvaderToAlien()
     {
 
+      this.networkProviderIdError=null;
+
+      var web3 = window.web3
+      var userAddress = this.acctAddress;
+      var amt  = Web3Helper.formattedAmountToRaw(this.stakeAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+
+      var tokenAddress = CryptoAssets.assets[this.assetName]['MaticContract']
+
+      if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
+
+        return;
+
+      }
+
+      var invaderContract = await Web3Helper.getInvaderContract(web3);
+
+      var alienContractAddress = await Web3Helper.getAlienContractAddress()
+
+
+      invaderContract.approve(alienContractAddress,amt).send()
+      .then(function(receipt){
+        console.log(receipt)
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
+
+
+
     },
-    async unstakeFromAlien()
+    async stakeInvaderToAlien()
+    {
+
+      this.networkProviderIdError=null;
+
+      var web3 = window.web3
+      var userAddress = this.acctAddress;
+      var amt  = Web3Helper.formattedAmountToRaw(this.withdrawAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+
+      var tokenAddress = CryptoAssets.assets[this.assetName]['MaticContract']
+
+      if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
+
+        return;
+
+      }
+
+
+    },
+    async unstakeInvaderFromAlien()
     {
 
     },

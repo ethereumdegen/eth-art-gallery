@@ -3,6 +3,8 @@
 //https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
 const tokenContractABI = require('../abi/MaticERC20ABI.json')
 const invaderContractABI = require('../abi/InvaderToken.json')
+const alienContractABI = require('../abi/AlienToken.json')
+
 const config = require('./config-0xbtc.js')
 
 const contractData = require('../contracts/contractdata.js')
@@ -91,6 +93,23 @@ var helper = {
 
     return contract;
   },
+  async getAlienContractAddress()
+  {
+
+    var contractAddress = contractData.contracts.matic_network.AlienToken.address;
+
+
+    return contractAddress;
+  },
+  async getAlienContract(web3)
+  {
+
+    var contractAddress = await this.getAlienContractAddress()
+
+    var contract =  web3.eth.contract(alienContractABI).at(contractAddress)
+
+    return contract;
+  },
 
   async getTokensAllowance(tokenAddress, ownerAddress, spender )
   {
@@ -141,7 +160,7 @@ var helper = {
           console.log('num Approved ',assetName, numApproved)
           console.log('num Approved f ', numApprovedFormatted)
 
-      return  ( parseFloat(numApprovedFormatted) > parseFloat(requestedDepositAmountFormatted) )
+      return  ( parseFloat(numApprovedFormatted) >= parseFloat(requestedDepositAmountFormatted) )
 
 
   },
