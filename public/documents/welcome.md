@@ -1,7 +1,7 @@
 ## Welcome to Invader.Finance  
 
 
-This open-source project was built by the 0xBitcoin community.  Earn ALIEN tokens on the Matic Network by providing liquidity on the decentralized exchange SwapMatic.io!  
+0xBTC has invaded the Matic Network!!  Earn ALIEN tokens on the Matic Network by providing liquidity on the decentralized exchange SwapMatic.io!  
 
 
 ALIEN has no pre-mine, no insta-mine, and the contracts have no owner.

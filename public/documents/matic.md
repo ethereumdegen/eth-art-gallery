@@ -6,7 +6,7 @@ Matic Network is an EVM-based Sidechain for the Ethereum Network.
 
 
 #### Connecting to Matic
-In order to get started with Matic on the internet, your web browser will need to be able to communicate with the Matic nodes..  If you are using a traditional Web Browser, simply download and install Metamask Plugin for this purpose.
+In order to get started with Matic on the internet, your web browser will need to be able to communicate with the Matic nodes.  If you are using a traditional Web Browser, simply download and install Metamask Plugin for this purpose.
 
 [https://Metamask.io](https://Metamask.io)
 

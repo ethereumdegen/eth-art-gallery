@@ -15,7 +15,7 @@
 			</a>
 
 
-				  <router-link class="text-green-400 text-glow text-base no-underline hover:no-underline mx-6 text-md" to="/docs">Docs</router-link>
+				  <router-link class="hidden lg:inline text-green-400 text-glow text-base no-underline hover:no-underline mx-6 text-md" to="/docs">Docs</router-link>
 
 		</div>
 
