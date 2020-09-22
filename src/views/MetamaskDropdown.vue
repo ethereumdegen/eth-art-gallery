@@ -30,7 +30,13 @@
               <a v-bind:href="'https://explorer.matic.network/address/'+acctAddress" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">{{acctAddress}}</a>
             </li>
             <li>
-              <a v-bind:href="'https://explorer.matic.network/address/'+contractAddress" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">View Contract In Explorer</a>
+              <a href="https://explorer.matic.network/address/0xb543a2b5d7795855433Dd7A6B7662CcC41e8e68a/contracts" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">Invader Contract</a>
+            </li>
+            <li>
+              <a href="https://explorer.matic.network/address/0xb51b25eA2319E15Aeb2C38C03E83F6e92A9Aeae3/contracts" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">Alien Token</a>
+            </li>
+            <li>
+              <a href="https://maticswap.io/swap" target="_blank" class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">Matic Swap</a>
             </li>
             <hr>
             <li>

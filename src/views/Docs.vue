@@ -38,10 +38,10 @@
 
 
             <div v-if="activeContent == 'purpose'">
-              <h3 class="text-lg"> Matic Tipjar </h3>
+              <h3 class="text-lg"> Invader Finance </h3>
               <br>
 
-              <p> The purpose of this application ('The Dapp') is to provide a simple front-end user experience that allows users to receive and send tips using the Matic Network via a Discord Bot custodian. </p>
+              <p> Invader Finance allows users to stake their 0xBTC/Matic Liquidity Pool tokens (LP Tokens) From Maticswap and earn Farm tokens from them called 'Aliens'. </p>
 
             </div>
 
@@ -65,7 +65,7 @@
             </div>
 
 
-            
+
 
 
 
