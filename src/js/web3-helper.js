@@ -194,6 +194,34 @@ var helper = {
 
     return balance;
   },
+  async getStakedInvaderBalance( ownerAddress)
+  {
+
+    var web3 = new Web3(Web3.givenProvider);
+
+    var contractAddress = await this.getAlienContractAddress();
+
+    var alienContract = new web3.eth.Contract(alienContractABI, contractAddress, {});
+
+
+    var balance = await alienContract.methods.getStakedTokenBalance(ownerAddress).call();
+
+    return balance;
+  },
+  async getYieldAvailable( ownerAddress)
+  {
+
+    var web3 = new Web3(Web3.givenProvider);
+
+    var contractAddress = await this.getAlienContractAddress();
+
+    var alienContract = new web3.eth.Contract(alienContractABI, contractAddress, {});
+
+
+    var balance = await alienContract.methods.getYieldAvailable(ownerAddress).call();
+
+    return balance;
+  },
 
   rawAmountToFormatted(amount,decimals)
   {

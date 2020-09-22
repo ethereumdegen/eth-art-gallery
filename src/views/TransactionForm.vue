@@ -21,7 +21,7 @@
 
             <div class="p-4 text-md w-full text-center">
 
-              <div> Estimated Alien Earnings: {{ estimatedAlienEarnings  }}</div>
+              <div> Estimated Alien Earnings: {{ yieldAvailable  }}</div>
             </div>
 
 
@@ -58,8 +58,13 @@
         <div v-if="assetName=='InvaderToken'">
 
 
-
           <div class="my-6 p-6 bg-green-500 w-full text-sm">
+
+
+                      <div class="p-4 text-md w-full text-center">
+                        <div> Staked Invader Balance: {{ stakedInvader  }}</div>
+
+                      </div>
 
           <input type="text" v-model="stakeAmount" v-on:keyup="updateFormMode" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
@@ -81,7 +86,7 @@
 
 
           <button @click="withdrawFromInvader" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
-            Withdraw LP Token From Invader
+            Withdraw Invader to LP Token
           </button>
 
           </div>
@@ -139,7 +144,7 @@ export default {
       stakeAmount: 0,
       unstakeAmount: 0,
 
-      estimatedAlienEarnings: 0,
+      yieldAvailable: 0,
       stakedInvader:0,
 
 
@@ -156,6 +161,8 @@ export default {
     //this.updateAll();
   //  setTimeout(this.updateFormMode, 2000);
     setTimeout(this.updateBalance, 2000);
+
+    setInterval(this.updateBalance, 10000);
 
     setInterval(this.updateFormMode, 6000);
   },
@@ -209,6 +216,14 @@ export default {
           userAddress
         )
         this.currentBalance =  Web3Helper.rawAmountToFormatted(balanceRaw, CryptoAssets.assets[this.assetName]['Decimals']);
+
+
+        var stakedInvaderRaw =  await Web3Helper.getStakedInvaderBalance(userAddress)
+        console.log('staked invader raw',stakedInvaderRaw)
+        this.stakedInvader =  Web3Helper.rawAmountToFormatted(stakedInvaderRaw, CryptoAssets.assets['InvaderToken']['Decimals']);
+
+        var yieldAvailableRaw =  await Web3Helper.getYieldAvailable(userAddress)
+        this.yieldAvailable =  Web3Helper.rawAmountToFormatted(yieldAvailableRaw, CryptoAssets.assets['AlienToken']['Decimals']);
 
       }
 
@@ -394,9 +409,42 @@ export default {
 
       var web3 = window.web3
       var userAddress = this.acctAddress;
-      var amt  = Web3Helper.formattedAmountToRaw(this.withdrawAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+      var amt  = Web3Helper.formattedAmountToRaw(this.stakeAmount, CryptoAssets.assets[this.assetName]['Decimals']);
 
-      var tokenAddress = CryptoAssets.assets[this.assetName]['MaticContract']
+
+      if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
+
+        return;
+
+      }
+
+      console.log('stake invader to alien ')
+
+
+      var alienContract = await Web3Helper.getAlienContract(web3)
+
+
+      alienContract.stakeTokens(amt).send()
+      .then(function(receipt){
+        console.log(receipt)
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
+
+
+
+
+    },
+    async unstakeInvaderFromAlien()
+    {
+
+
+      this.networkProviderIdError=null;
+
+      var web3 = window.web3
+      var userAddress = this.acctAddress;
+      var amt  = Web3Helper.formattedAmountToRaw(this.unstakeAmount, CryptoAssets.assets[this.assetName]['Decimals']);
+
 
       if(this.providerNetworkID != 0x89){
         this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
@@ -406,17 +454,48 @@ export default {
       }
 
 
-    },
-    async unstakeInvaderFromAlien()
-    {
+      var alienContract = await Web3Helper.getAlienContract(web3)
+
+
+      alienContract.unstakeTokens(amt).send()
+      .then(function(receipt){
+        console.log(receipt)
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
+
+
 
     },
     async mintAliens()
     {
 
+
+      this.networkProviderIdError=null;
+
+      var web3 = window.web3
+      var userAddress = this.acctAddress;
+
+       if(this.providerNetworkID != 0x89){
+        this.networkProviderIdError = "Please switch your Web3 Provider to Matic Mainnet to call this method."
+
+        return;
+
+      }
+
+
+      var alienContract = await Web3Helper.getAlienContract(web3)
+
+
+      alienContract.claimYields( ).send()
+      .then(function(receipt){
+        console.log(receipt)
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+      });
+
+
+
     }
-
-  },
-
+  }
 }
+
 </script>
