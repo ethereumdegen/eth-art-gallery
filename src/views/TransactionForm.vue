@@ -21,7 +21,7 @@
 
             <div class="p-4 text-md w-full text-center">
 
-              <div> Estimated Alien Earnings: {{ yieldAvailable  }}</div>
+              <div> Estimated Alien Earnings: {{ estimatedYield  }}</div>
 
             </div>
 
@@ -151,6 +151,7 @@ export default {
       unstakeAmount: 0,
 
       yieldAvailable: 0,
+      estimatedYield: 0,
       stakedInvader:0,
 
 
@@ -171,18 +172,20 @@ export default {
     setInterval(this.updateBalance, 10000);
 
     setInterval(this.updateFormMode, 6000);
+
+    setInterval(this.updateEstimatedEarnings, 100);
   },
   updated()
   {
 
-    this.updateAll();
+    //this.updateAll();
   },
   methods: {
     updateAll()
     {
         console.log('form updated')
       // this.updateFormMode();
-       this.updateBalance();
+      // this.updateBalance();
     },
     currentDomainName(){
       if(this.activeWalletDomain == "matic"){ return "Matic Network" }else{ return "Tip Jar" }
@@ -208,6 +211,26 @@ export default {
       //this.networkProviderIdError = null;
       return true;
     },
+    updateEstimatedEarnings()
+    {
+
+      var stakedInvader = this.stakedInvader;
+      var blockTime = 2000; //ms
+      var tickTime = 100;  //ms
+
+      var tokensEarnedPerBlock = stakedInvader / 1000000.0;
+
+      var tokensEarnedPerTick = (tokensEarnedPerBlock * (tickTime/blockTime))
+
+      console.log('meep1', tokensEarnedPerTick, this.estimatedYield)
+
+      this.estimatedYield = (parseFloat(parseFloat(this.estimatedYield) + parseFloat(tokensEarnedPerTick))).toFixed(8);
+
+      console.log('meep2', tokensEarnedPerTick, this.estimatedYield )
+
+
+
+    },
     async updateBalance()
     {
 
@@ -224,12 +247,15 @@ export default {
         this.currentBalance =  Web3Helper.rawAmountToFormatted(balanceRaw, CryptoAssets.assets[this.assetName]['Decimals']);
 
 
-        var stakedInvaderRaw =  await Web3Helper.getStakedInvaderBalance(userAddress)
-        console.log('staked invader raw',stakedInvaderRaw)
-        this.stakedInvader =  Web3Helper.rawAmountToFormatted(stakedInvaderRaw, CryptoAssets.assets['InvaderToken']['Decimals']);
 
-        var yieldAvailableRaw =  await Web3Helper.getYieldAvailable(userAddress)
-        this.yieldAvailable =  Web3Helper.rawAmountToFormatted(yieldAvailableRaw, CryptoAssets.assets['AlienToken']['Decimals']);
+          var stakedInvaderRaw =  await Web3Helper.getStakedInvaderBalance(userAddress)
+          console.log('staked invader raw',stakedInvaderRaw)
+          this.stakedInvader =  Web3Helper.rawAmountToFormatted(stakedInvaderRaw, CryptoAssets.assets['InvaderToken']['Decimals']);
+
+          var yieldAvailableRaw =  await Web3Helper.getYieldAvailable(userAddress)
+          this.yieldAvailable =  Web3Helper.rawAmountToFormatted(yieldAvailableRaw, CryptoAssets.assets['AlienToken']['Decimals']);
+          this.estimatedYield = parseFloat(this.yieldAvailable).toFixed(8);
+
 
       }
 
