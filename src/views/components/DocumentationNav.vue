@@ -5,7 +5,7 @@
 
     <ul>
       <div v-for="section in navConfig.sections" v-if="section.hidden!=true">
-        <li class="text-lg text-orange-600"> {{section.title}} </li>
+        <li class="text-lg text-green-600"> {{section.title}} </li>
         <li v-for="row in section.rows">
           <a href="#" @click="setContent(row.id)" class="text-orange-200">
             {{row.title}}
