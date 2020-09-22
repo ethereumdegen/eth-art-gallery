@@ -34,3 +34,10 @@
   90% { transform: translate(1px, 2px) rotate(0deg); }
   100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
+
+
+.text-glow
+{
+  text-shadow: rgba(38,255,145,.5) 0 0 18px;
+
+}

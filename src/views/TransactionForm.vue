@@ -3,7 +3,7 @@
     <div class="">
       <h3 class="text-lg font-bold">Wallet Balance ({{currentDomainName()}})</h3>
 
-      <div class="p-12 text-xl w-full text-center">
+      <div class="p-12 text-xl w-full text-center  text-glow text-green-500">
         {{currentBalance}} {{getAssetNickname()}}
       </div>
 
@@ -19,7 +19,7 @@
 
           <div class=" p-6 bg-green-500 w-full text-sm relative">
 
-            <div class="p-4 text-md w-full text-center">
+            <div class="p-4 text-md text-white w-full text-center">
 
               <div> Estimated Alien Earnings: {{ estimatedYield  }}</div>
 
@@ -36,7 +36,7 @@
 
           <br>
 
-          <button @click="mintAliens" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="mintAliens" class="bg-gray-900 text-glow text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Mint Aliens from Staked Invader
           </button>
 
@@ -44,17 +44,17 @@
 
           </div>
 
-          <div class="p-6 my-2 bg-gray-500 w-full text-sm">
+          <div class="p-6 my-2 bg-gray-800  text-white w-full text-sm">
 
-            <div class="p-4 text-md w-full text-center">
+            <div class="p-4 text-md text-white w-full text-center">
               <div> Staked Invader Balance: {{ stakedInvader  }}</div>
 
             </div>
 
-            <input type="text" v-model="unstakeAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+            <input type="text" v-model="unstakeAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-300 bg-gray-900 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
 
-          <button @click="unstakeInvaderFromAlien" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="unstakeInvaderFromAlien" class="bg-gray-900 text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Unstake Invader
           </button>
 
@@ -67,18 +67,18 @@
           <div class="my-6 p-6 bg-green-500 w-full text-sm">
 
 
-          <div class="p-4 text-md w-full text-center">
+          <div class="p-4 text-md text-white w-full text-center">
             <div> Staked Invader Balance: {{ stakedInvader  }}</div>
 
           </div>
 
-          <input type="text" v-model="stakeAmount" v-on:keyup="updateFormMode" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+          <input type="text" v-model="stakeAmount" v-on:keyup="updateFormMode" class="shadow appearance-none border rounded py-2 px-3 text-gray-300 bg-gray-900 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
-          <button @click="approveInvaderToAlien" v-if="!approvedEnoughToDeposit" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="approveInvaderToAlien" v-if="!approvedEnoughToDeposit" class="bg-gray-900 text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Approve Invader To Stake
           </button>
 
-          <button @click="stakeInvaderToAlien" v-if="approvedEnoughToDeposit" class="bg-white text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="stakeInvaderToAlien" v-if="approvedEnoughToDeposit" class="bg-gray-900 text-glow text-sm text-green-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Stake Invader to Farm Aliens
           </button>
 
@@ -86,29 +86,29 @@
 
           </div>
 
-          <div class="p-6 bg-gray-500 w-full text-sm">
+          <div class="p-6 bg-gray-800  text-white w-full text-sm">
 
-          <input type="text" v-model="withdrawAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+          <input type="text" v-model="withdrawAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-300 bg-gray-900 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
 
-          <button @click="withdrawFromInvader" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="withdrawFromInvader" class="bg-gray-900 text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Withdraw Invader to LP Token
           </button>
 
           </div>
         </div>
 
-        <div v-if="assetName=='0xBTC_LP_Token'">
+        <div v-if="assetName=='0xBTC_LP_Token'" class="mb-48">
 
-          <div class="p-6 bg-gray-500 w-full text-sm">
+          <div class="p-6 bg-gray-800  text-white w-full text-sm">
 
-          <input v-on:keyup="updateFormMode" type="text" v-model="depositAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
+          <input v-on:keyup="updateFormMode" type="text" v-model="depositAmount" class="shadow appearance-none border rounded py-2 px-3 text-gray-300 bg-gray-900 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
-          <button @click="approveToInvader" v-if="!approvedEnoughToDeposit" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="approveToInvader" v-if="!approvedEnoughToDeposit" class="bg-gray-900 text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Approve LP Token To Invader
           </button>
 
-          <button @click="depositToInvader" v-if="approvedEnoughToDeposit" class="bg-white text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
+          <button @click="depositToInvader" v-if="approvedEnoughToDeposit" class="bg-gray-900 text-sm text-purple-500 hover:text-purple-400 py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2">
             Deposit LP Token To Invader
           </button>
 

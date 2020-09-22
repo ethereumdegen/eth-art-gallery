@@ -10,7 +10,7 @@
 			<img  src="@/assets/img/invader_sm.png" alt="ETH avatar" class="rounded-full h-6 w-6 inline-block">
 
 
-			<a class="text-green-400 text-base no-underline hover:no-underline font-extrabold text-xl"  href="#">
+			<a class="text-green-400 text-glow text-base no-underline hover:no-underline font-extrabold text-xl"  href="#">
 				Invader.Finance
 			</a>
 		</div>
@@ -30,7 +30,7 @@
 
 
   <div class="lg:flex mb-4">
-    <div class="w-full lg:w-1/3 bg-gray-300 overflow-y-scroll block ">
+    <div class="w-full lg:w-1/3 bg-gray-800 overflow-y-scroll block ">
 
 			<div class="m-6 p-4 bg-gray-100">
 
@@ -74,7 +74,7 @@
 					</a>
 -->
 
-					 
+
 
 				</div>
 
@@ -82,11 +82,11 @@
 
 
     </div>
-    <div class="w-full lg:w-2/3 bg-gray-300 block ">
+    <div class="w-full lg:w-2/3 bg-gray-800 block ">
 			<div v-if="errorMessage" class="p-8 bg-red-200">
 				{{errorMessage}}
 			</div>
-			<div class="m-6 p-4 bg-gray-100">
+			<div class="m-6 p-4 bg-gray-900">
 
 				<TransactionForm
 				ref="txform"
