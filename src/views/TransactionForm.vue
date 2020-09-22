@@ -17,14 +17,20 @@
         <div v-if="assetName=='AlienToken'">
 
 
-          <div class=" p-6 bg-green-500 w-full text-sm">
+          <div class=" p-6 bg-green-500 w-full text-sm relative">
 
             <div class="p-4 text-md w-full text-center">
 
               <div> Estimated Alien Earnings: {{ yieldAvailable  }}</div>
+
             </div>
 
+            <div class="absolute inset-x-2 top-2 " style="top:2em;right:2em;" v-if="stakedInvader > 0">
 
+              <img src="@/assets/img/invader_sm.png" alt="Invader" class="shake h-5 w-5">
+
+
+            </div>
 
 
 
@@ -61,10 +67,10 @@
           <div class="my-6 p-6 bg-green-500 w-full text-sm">
 
 
-                      <div class="p-4 text-md w-full text-center">
-                        <div> Staked Invader Balance: {{ stakedInvader  }}</div>
+          <div class="p-4 text-md w-full text-center">
+            <div> Staked Invader Balance: {{ stakedInvader  }}</div>
 
-                      </div>
+          </div>
 
           <input type="text" v-model="stakeAmount" v-on:keyup="updateFormMode" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline inline-block mr-4" size="8"/>
 
