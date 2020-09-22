@@ -10,7 +10,7 @@
         <router-link class="font-semibold text-gray-700 hover:underline" to="/docs">Docs</router-link>
       </div>
       <div class="mt-2">
-        <a href="https://github.com/matictips/matictips-web" class="text-sm font-semibold text-gray-600 hover:underline">
+        <a href="https://github.com/invaderfinance" class="text-sm font-semibold text-gray-600 hover:underline">
           Source on GitHub
         </a>
       </div>
