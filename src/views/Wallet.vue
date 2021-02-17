@@ -1,8 +1,10 @@
 <template>
 
 
+<div class=" container mx-auto " id="wallet">
 
-<div class="page-container" id="wallet">
+  <Navbar /> 
+
 
 
       <div id="jumbotron" class=" ">
@@ -297,9 +299,12 @@
       </section>
 
 
-
+  <Footer /> 
 
   </div>
+
+
+
 
  </template>
 
@@ -309,8 +314,12 @@ const tokenData = require('../config/token-data.json')
 
 import Web3Plug from '../js/web3Plug.js'
 
+import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
+
 export default {
   name: 'Wallet',
+  components: {Navbar, Footer},
   data() {
     return {
 		selectedActionAsset: null,

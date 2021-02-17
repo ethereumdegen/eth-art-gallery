@@ -9,10 +9,10 @@ import './css/github-markdown.css'
 import './css/whitespace.scss'
 
 
+Vue.config.productionTip = false
 
 Vue.use(VueTailwind)
 
-Vue.config.productionTip = false
  
 
 new Vue({

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Wallet from './views/Wallet.vue'
- 
-import Landing from './views/Landing.vue' 
+  
 import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
