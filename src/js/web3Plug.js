@@ -72,8 +72,9 @@ const web3PlugEmitter = new Web3PlugEmitter();
   //const kovanChainID = 42
 
 const chainIds = {
-  1:'mainnet',
-  42:'kovan'
+  '0x1':'mainnet',
+  '0x2a':'kovan',
+  '0x64':'xdai'
 
 }
 

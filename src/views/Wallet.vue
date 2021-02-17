@@ -125,7 +125,7 @@
 
 
           </div>
-          <div class="lava-transfer-container" v-if="(selectedActionType=='lavatransfer')" v-cloak>
+          <div class="lava-transfer-container bg-gray-600" v-if="(selectedActionType=='lavatransfer')" v-cloak>
 
             <div class="subtitle-banner has-background-orange has-text-light"> Approved Balance: {{ selectedActionAsset.approved_balance_formatted }} </div>
 
@@ -239,9 +239,9 @@
 
         <div class="whitespace-md"></div>
 
-			Asset List 
-          <div id="asset-list" class="asset-list">
-
+		
+          <div id="asset-list" class="asset-list bg-gray-400">
+            	Asset List 
             <table>
               <thead>
                 <tr >
@@ -254,7 +254,7 @@
               </thead>
               <tbody>
               <tr    v-for="(item, index) in token_list" v-bind:data-tokenaddress="item.address" v-bind:class="{   'asset-row':true, 'acts-as-link':true, 'hover-shadow':true   } " >
-                <td class="row-cell has-text-centered icon-url"><img  v-bind:src="item.icon_url" height="42" width="42" ></img></td>
+                <td class="row-cell has-text-centered icon-url"><img  v-bind:src="item.imgurl" height="42" width="42" ></img></td>
                 <td class="row-cell has-text-centered token-name">{{item.name}}</td>
                 <td class="row-cell has-text-centered"><div class=" token-balance">{{item.approved_balance_formatted}}</div> </td>
                 <td class="row-cell has-text-centered"><div class="has-text-centered token-balance">{{item.wallet_balance_formatted}}</div>  </td>
@@ -269,7 +269,7 @@
                  <div class="whitespace-md"></div>
 
 
-             <div id="lava-packet-dropzone" class="lava-packet-dropzone">
+             <div id="lava-packet-dropzone " class="lava-packet-dropzone bg-red-200">
 
                <div class="subtitle is-size-3">Drop Lava Packets Here</div>
 
@@ -303,7 +303,11 @@
 
  </template>
 
-<script>
+<script >
+
+const tokenData = require('../config/token-data.json')
+
+import Web3Plug from '../js/web3Plug.js'
 
 export default {
   name: 'Wallet',
@@ -312,12 +316,44 @@ export default {
 		selectedActionAsset: null,
 		token_list:  [],
 		shouldRender:true,
-		errorMessage:null
+		errorMessage:null,
+    web3Plug: null
 
     }
   },
   created(){
-	  this.token_list = [{}]
+
+
+     this.web3Plug = new Web3Plug()
+
+    this.web3Plug.getPlugEventEmitter().on('stateChanged', function(connectionState) {
+          console.log('stateChanged',connectionState);
+
+          // CUSTOM CODE HERE
+          this.activeAccountAddress = connectionState.activeAccountAddress
+          this.activeNetworkId = connectionState.activeNetworkId
+          // END CUSTOM CODE
+
+        }.bind(this));
+
+    this.web3Plug.getPlugEventEmitter().on('error', function(errormessage) {
+          console.error('error',errormessage);
+
+          //CUSTOM CODE HERE
+          this.web3error = errormessage
+          // END CUSTOM CODE
+        }.bind(this));
+
+
+    this.web3Plug.connectWeb3( )
+
+
+    let networkName = this.web3Plug.getWeb3NetworkName(this.activeNetworkId)
+    console.log('net name', networkName )
+
+    let localTokenData = tokenData.networks[networkName]
+
+	  this.token_list = Object.values(localTokenData)
   },
   methods: {
 
