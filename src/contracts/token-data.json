@@ -1,0 +1,14 @@
+{"networks": {
+    "mainnet":{
+      "wEth":{"name":"Wrapped Ether", "symbol":"wEth", "decimals": 18,  "address":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" },
+      "0xBTC":{"name":"0xBitcoin", "symbol":"0xBTC",  "decimals": 8, "supportsDelegateCallDeposit":true, "address":"0xb6ed7644c69416d67b522e20bc294a9a9b405b31" },
+      "DAI":{"name":"DAI Stablecoin", "symbol":"DAI", "decimals": 18, "address":"0x6b175474e89094c44da98b954eedeac495271d0f" }
+
+    },
+    "kovan":{
+      "TEST":{"name":"Test Token", "symbol":"TEST", "decimals": 18,  "address":"0xf5b71f8d25d3e90b9ec0c08d890853187df4bef4" } 
+
+    }
+
+  }
+}

@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Wallet from './views/Wallet.vue'
  
-import Login from './views/Login.vue'
-import Docs from './views/Docs.vue'
+import Landing from './views/Landing.vue' 
 import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
@@ -14,25 +13,21 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'landing',
+      component: Landing
     },
 
     {
       path: '/#',
-      name: 'home',
-      component: Home
+      name: 'landing',
+      component: Landing
     },
     {
-      path: '/login',
-      name: 'login',
-      component: Login,
+      path: '/wallet',
+      name: 'wallet',
+      component: Wallet,
     },
-    {
-      path: '/docs',
-      name: 'docs',
-      component: Docs,
-    },
+     
     {
       path: '/*',
       component: NotFound
