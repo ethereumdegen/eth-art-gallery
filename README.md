@@ -5,6 +5,12 @@
  This dapp lets you transfer XDAI tokens with Meta Transactions
 
 
+#### TODO 
+//https://github.com/poanetwork/tokenbridge-contracts/tree/master/test/helpers
+integrate eip712-sign-permit
+
+
+
 ![image](https://user-images.githubusercontent.com/6249263/72673879-ed7c8c00-3a3d-11ea-8aa0-df98f0cff530.png)
 
 

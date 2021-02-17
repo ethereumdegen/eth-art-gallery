@@ -1,219 +1,326 @@
 <template>
-<div>
-
-<nav id="header" class="w-full z-10 pin-t">
-
-
-	<div class="w-full mx-auto flex flex-wrap items-center justify-between mt-0 py-3 bg-gray-700 px-4">
-
-		<div class="pl-4">
-			<img  src="@/assets/img/invader_sm.png" alt="ETH avatar" class="rounded-full h-6 w-6 inline-block">
-
-
-			<a class="text-green-400 text-glow text-base hover:text-white no-underline hover:no-underline font-extrabold text-xl"  href="#">
-				Invader.Finance
-			</a>
-
-
-				  <router-link class="hidden lg:inline text-green-400 text-glow text-base no-underline hover:no-underline mx-6 text-md" to="/docs">Docs</router-link>
-
-		</div>
-
-			<div class="  flex items-center w-auto mt-2 lg:mt-0 bg-grey-lightest md:bg-transparent z-20" id="nav-content">
-				<div class="  lg:flex justify-end flex-1 items-center">
-					<MetamaskDropdown
-            :acctAddress= "activeAccountAddress"
-						:providerNetworkID= "providerNetworkID"
-						:contractAddress="invaderContractAddress"
-          />
-				</div>
-			</div>
-		</div>
-	</nav>
 
 
 
-  <div class="lg:flex mb-4">
-    <div class="w-full lg:w-1/3 bg-gray-800 overflow-y-scroll block ">
-
-			<div class="m-6 p-4 bg-gray-100">
+<div class="page-container" id="wallet">
 
 
-
-				<h3 class="text-lg font-bold">Your Assets</h3>
-
-				<ul class="flex m-6">
-
-					<li class="flex-1 mr-2">
-						<a @click="setWalletDomain('matic')" :class="walletDomain=='matic' ? 'bg-green-500  text-white' : 'bg-transparent hover:border-gray-200 hover:bg-gray-200 text-gray-500 border-purple-200'" class="text-center block border border-blue-500 rounded py-2 px-4 " href="#">Matic Network</a>
-					</li>
-				</ul>
-
-
-				<div class="container mt-8">
+      <div id="jumbotron" class=" ">
 
 
 
-					<a href="#" @click="selectAsset('0xBTC_LP_Token')" :class="assetName=='0xBTC_LP_Token' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> 0xBTC LP Token </div>
-						<div class="text-md w-1/2 text-right">   </div>
-					</a>
-
-					<a href="#" @click="selectAsset('InvaderToken')" :class="assetName=='InvaderToken' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> Invader Token </div>
-						<div class="text-md w-1/2 text-right">   </div>
-					</a>
-
-					<a href="#" @click="selectAsset('AlienToken')" :class="assetName=='AlienToken' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> Alien Token </div>
-						<div class="text-md w-1/2 text-right">   </div>
-					</a>
+        <div class="whitespace-sm"></div>
 
 
-<!--
-					<a href="#" @click="selectAsset('0xBTC')" :class="assetName=='0xBTC' ? 'bg-purple-400 text-white' : 'bg-transparent text-purple-700'" class="flex width-full  hover:bg-purple-500  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ">
-						<div class="text-md w-1/2"> 0xBTC </div>
-						<div class="text-md w-1/2 text-right">   </div>
+        <div class="subtitle color-primary has-text-centered" v-cloak>
+          {{ errorMessage }}
+        </div>
 
-					</a>
--->
+      </div>
 
-
-
-				</div>
-
-	  </div>
+      <section class="hero   ">
+        <div class="hero-body">
 
 
-    </div>
-    <div class="w-full lg:w-2/3 bg-gray-800 block ">
-			<div v-if="errorMessage" class="p-8 bg-red-200">
-				{{errorMessage}}
-			</div>
-			<div class="m-6 p-4 bg-gray-900">
+        <div id="action-container" class="action-container box" v-cloak v-if="shouldRender && selectedActionAsset"    >
+          <div class="token-titlebar flex-bar">
+                <div class="token-title flex-start"> {{ selectedActionAsset.name }} </div>
 
-				<TransactionForm
-				ref="txform"
-				:acctAddress= "activeAccountAddress"
-				:activeWalletDomain= "walletDomain"
-				:providerNetworkID= "providerNetworkID"
-				:assetName= "assetName"
-				/>
+                <div class="token-icon flex-end"> <img  v-bind:src="selectedActionAsset.icon_url" height="42" width="42" ></img> </div>
+          </div>
+          <div class="action-tabs-bar">
+
+            <div class="tabs is-toggle hide-overflow"  >
 
 
-			</div>
+
+              <ul class="columns">
+                <li data-action-type="approve"  v-bind:class="{ 'tab-action':true,  'column':true, 'column-button':true, 'is-active':(selectedActionType=='approve')  } ">
+                  <a>
+                    <span class="icon is-small">   <i class="material-icons">file_download</i> </span>
+                    <span>Approve For Lava</span>
+                  </a>
+                </li>
+
+
+
+                <li data-action-type="lavatransfer" v-bind:class="{  'tab-action':true, 'column':true, 'column-button':true,  'is-active':(selectedActionType=='lavatransfer')  } ">
+                  <a>
+                    <span class="icon is-small one-third"> <i class="material-icons">fast_forward</i> </span>
+                    <span>Lava Transfer</span>
+                  </a>
+                </li>
+
+              </ul>
+            </div>
+
+          </div>
+          <div class="deposit-container" v-if="(selectedActionType=='deposit')" v-cloak>
+
+
+              <div class="subtitle-banner has-background-info has-text-light"> External Balance: {{ selectedActionAsset.wallet_balance_formatted }} </div>
 
 
 
 
-    </div>
+
+
+
+
+             <div class="input-container padding-md" v-if="!supportsDelegateCallDeposit">
+               <div class="label">Deposit Tokens</div>
+
+                 <div class="columns">
+                     <div class="column">
+                       <div class="form-group">
+                         <input class="input input-short is-primary" v-model="depositTokenQuantity" placeholder="token amount">
+                          <div class="button is-primary btn-action-deposit"> Deposit </div>
+                       </div>
+                      </div>
+                    <div class="column">
+
+                    </div>
+               </div>
+             </div>
+
+             <div class="input-container padding-md" v-if="supportsDelegateCallDeposit">
+               <div class="label">Deposit Tokens</div>
+
+                 <div class="columns">
+                     <div class="column">
+                       <div class="form-group">
+                         <input class="input input-short is-primary" v-model="approveAndDepositTokenQuantity" placeholder="token amount">
+                          <div class="button is-primary btn-action-approve-and-deposit"> Deposit </div>
+                       </div>
+                      </div>
+                    <div class="column">
+
+                    </div>
+               </div>
+             </div>
+
+
+
+          </div>
+          <div class="approve-container" v-if="(selectedActionType=='approve')" v-cloak>
+
+            <div class="subtitle-banner has-background-info has-text-light"> External Balance: {{ selectedActionAsset.wallet_balance_formatted }} </div>
+
+            <div class="input-container padding-md"   >
+              <div class="label">Approve Tokens</div>
+
+              <div class="columns">
+                <div class="column">
+                  <div class="form-group">
+                      <input type="text" class="input input-short is-primary " v-model="approveTokenQuantity" placeholder="token amount">
+                      <div class="button is-primary btn-action-approve" v-on:click="actionApproveTokens"> Approve </div>
+                  </div>
+                </div>
+                <div class="column">
+                    <div class="is-size-6"> Quantity Approved: {{ selectedActionAsset.approved_balance_formatted }} </div>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+          <div class="lava-transfer-container" v-if="(selectedActionType=='lavatransfer')" v-cloak>
+
+            <div class="subtitle-banner has-background-orange has-text-light"> Approved Balance: {{ selectedActionAsset.approved_balance_formatted }} </div>
+
+            <div class="input-container padding-md">
+            <div class="label">Transfer Tokens</div>
+
+              <p> Generate a signed Lava Transfer Message.  This message can be submitted to the Ethereum network by anyone, at which point the tokens will be transferred to the recipient's account.  </p>
+
+
+              <div class="whitespace-sm"></div>
+
+
+                <div class="columns">
+                    <div class="column">
+
+
+
+                      <div class="form-group padding-md">
+                          <div class="label">Method</div>
+
+                         <div class="select">
+                            <select class=" " onchange=" " v-model="transferTokenMethod" placeholder="">
+                              <option>transfer</option>
+                              <option>approveAndCall</option>
+                           </select>
+                         </div>
+                      </div>
+
+                      <div class="form-group padding-md">
+                          <div class="label">Amount</div>
+                          <input class="input input-short is-primary" v-model="transferTokenQuantity" placeholder="token amount">
+                      </div>
+
+                      <div class="form-group padding-md">
+                          <div class="label">Recipient</div>
+                          <input class="input is-primary" v-model="transferTokenRecipient" placeholder="token recipient">
+                      </div>
+
+
+                      <div class="form-group padding-md">
+                          <div class="label">Relay Authority</div>
+
+                         <div class="select">
+                            <select class=" " onchange=" " v-model="relayKingRequired" placeholder="">
+                              <option>any relayers</option>
+                           </select>
+                         </div>
+                      </div>
+
+                      <div class="form-group padding-md">
+                          <div class="label">Relay Reward (tokens)</div>
+                          <div><span> Optional </span></div>
+                          <input class="input input-short is-primary" v-model="transferTokenRelayReward" placeholder="token relay reward">
+                      </div>
+
+                      <div class="whitespace-sm"></div>
+                        <div class="button is-primary btn-action-lava-transfer" v-on:click="actionLavaTransfer"> Sign </div>
+
+                     </div>
+                   <div class="column">
+                       <div class="is-size-6">   </div>
+
+                       <p v-if="lavaPacketExists"> Specify the URL for a Lava Network Node and broadcast this packet to the Lava Network Relayers.  They will submit the packet to the Ethereum Network if the reward is high enough.  </p>
+
+                       <div class="form-group padding-md" v-if="lavaPacketExists">
+                           <div class="label">Relay Node URL</div>
+                           <input class="input input-short is-primary" v-model="relayNodeURL" placeholder="xxx.xxx.xxx.xxx:yyyy">
+                           <a v-bind:href="relayNodeURL"> Visit Relay Website </a>
+
+
+                             <div class="whitespace-sm"></div>
+
+                           <div id="btn-broadcast-lava-packet" v-if="lavaPacketExists">
+                             <div class="button is-primary btn-broadcast-lava-packet">Broadcast Lava Packet</div>
+                           </div>
+
+                           <div class="whitespace-sm"></div>
+
+                           <div class="subtitle color-primary has-text-centered" v-cloak v-if="lavaPacketExists" >
+                             {{ broadcastMessage }}
+                           </div>
+                       </div>
+
+
+
+
+                      <div class="whitespace-sm"></div>
+
+                       <div class="form-group padding-md" v-if="lavaPacketExists">
+                           <div class="label">Lava Packet Data</div>
+                           <textarea class="textarea" placeholder="Lava packet data" rows="10"  v-model="lavaPacketData" ></textarea>
+
+                       </div>
+
+
+
+
+                               <div class="whitespace-sm"></div>
+
+                               <div id="btn-download-lava-packet" v-if="lavaPacketExists">
+                               </div>
+                   </div>
+              </div>
+           </div>
+
+
+          </div>
+
+        </div>
+
+
+        <div class="whitespace-md"></div>
+
+			Asset List 
+          <div id="asset-list" class="asset-list">
+
+            <table>
+              <thead>
+                <tr >
+                  <td class="has-text-centered"> Icon </td>
+                  <td class="has-text-centered"> Name </td>
+                  <td class="has-text-centered"> Approved Balance </td>
+                  <td class="has-text-centered"> External Amount </td>
+
+                </tr>
+              </thead>
+              <tbody>
+              <tr    v-for="(item, index) in token_list" v-bind:data-tokenaddress="item.address" v-bind:class="{   'asset-row':true, 'acts-as-link':true, 'hover-shadow':true   } " >
+                <td class="row-cell has-text-centered icon-url"><img  v-bind:src="item.icon_url" height="42" width="42" ></img></td>
+                <td class="row-cell has-text-centered token-name">{{item.name}}</td>
+                <td class="row-cell has-text-centered"><div class=" token-balance">{{item.approved_balance_formatted}}</div> </td>
+                <td class="row-cell has-text-centered"><div class="has-text-centered token-balance">{{item.wallet_balance_formatted}}</div>  </td>
+
+              </tr>
+            </tbody>
+            </table>
+
+           </div>
+
+
+                 <div class="whitespace-md"></div>
+
+
+             <div id="lava-packet-dropzone" class="lava-packet-dropzone">
+
+               <div class="subtitle is-size-3">Drop Lava Packets Here</div>
+
+               <div class="dropzone"  >
+                  <div class="hand-icon-holder">
+
+                  </div>
+
+                  <div class="dropzone-file-input-container">
+                    <p> Or select a local file </p>
+
+                      <div class="light-box">
+                        <input class="dropzone-file-input" name="lavaPacketFile" type="file">
+                      </div>
+                  </div>
+
+               </div>
+
+
+
+
+             </div>
+
+        </div>
+      </section>
+
+
+
+
   </div>
 
-
-
-
-</div>
-</template>
-
+ </template>
 
 <script>
-import MetamaskDropdown from './MetamaskDropdown.vue'
-import TransactionForm from './TransactionForm.vue'
-import Web3Helper from '../js/web3-helper.js'
-import CryptoAssets from '../js/cryptoassets.js'
-import MaticHelper from '../js/matic-helper.js'
-
-//const Web3 = require('web3');
-
-
 
 export default {
-  name: 'Home',
-  components: {
-     MetamaskDropdown,TransactionForm
-  },
-  data () {
+  name: 'Wallet',
+  data() {
     return {
-      activeAccountAddress: null,
-			walletDomain: 'matic',
-			providerNetworkID: null,
-			assetName: '0xBTC_LP_Token',
-			invaderContractAddress: null,
-			errorMessage: null
+		selectedActionAsset: null,
+		token_list:  [],
+		shouldRender:true,
+		errorMessage:null
+
     }
   },
-  async created () {
-
-
-     this.checkSignedIn()
-
-
-			if ( window.ethereum.selectedAddress) {
-				 await Web3Helper.init();
-
-
-				 	this.invaderContractAddress = await Web3Helper.getInvaderContractAddress()
-
-	      	this.readWeb3Data();  //opens the window
-
-					var netId = await Web3Helper.getProviderNetworkID()
-
-
-				  if(netId != 0x89){
-		        this.errorMessage = "Please switch your Web3 Provider to Matic Mainnet (see Docs for help)."
-					}
-		 }
-
-
+  created(){
+	  this.token_list = [{}]
   },
   methods: {
-   async checkSignedIn () {
-
-
-
-		await window.ethereum
-
-		console.log(window.ethereum)
-
-		 if (!window.ethereum.selectedAddress) {
-			 this.$router.replace('/login');
-			 return;
-		}
-
-
-
-    },
-   async readWeb3Data () {
-     var accounts = await Web3Helper.getConnectedAccounts();
-
-		 this.providerNetworkID = await Web3Helper.getProviderNetworkID();
-
-     this.activeAccountAddress = accounts[0]
-
-		 //this.updateBalances()
-   },
-	 async setWalletDomain(domainName)
-	 {
-		 this.walletDomain = domainName;
-
-		 // await this.updateBalances()
-
-		 this.$refs.txform.updateAll()
-	 },
-	 async selectAsset(assetName)
-	 {
-		 this.assetName = assetName;
-
-
- 		this.$refs.txform.updateAll()
-
-		 // await this.updateBalances()
-	 },
-
-
-
 
   }
-
 }
 </script>

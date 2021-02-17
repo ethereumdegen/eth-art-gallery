@@ -13,20 +13,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'landing',
-      component: Landing
+      name: 'wallet',
+      component: Wallet
     },
 
-    {
-      path: '/#',
-      name: 'landing',
-      component: Landing
-    },
-    {
-      path: '/wallet',
-      name: 'wallet',
-      component: Wallet,
-    },
+     
      
     {
       path: '/*',
