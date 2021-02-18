@@ -57,58 +57,18 @@
         <div class="whitespace-md"></div>
 
 		
-          <div id="asset-list" class="asset-list bg-gray-400">
-            	Asset List 
-            <table>
-              <thead>
-                <tr >
-                  <td class="has-text-centered"> Icon </td>
-                  <td class="has-text-centered"> Name </td>
-                  <td class="has-text-centered"> Approved Balance </td>
-                  <td class="has-text-centered"> External Amount </td>
-
-                </tr>
-              </thead>
-              <tbody>
-              <tr    v-for="(item, index) in token_list" v-bind:data-tokenaddress="item.address" v-bind:class="{   'asset-row':true, 'acts-as-link':true, 'hover-shadow':true   } " >
-                <td class="row-cell has-text-centered icon-url"><img  v-bind:src="item.imgurl" height="42" width="42" ></img></td>
-                <td class="row-cell has-text-centered token-name">{{item.name}}</td>
-                <td class="row-cell has-text-centered"><div class=" token-balance">{{item.approved_balance_formatted}}</div> </td>
-                <td class="row-cell has-text-centered"><div class="has-text-centered token-balance">{{item.wallet_balance_formatted}}</div>  </td>
-
-              </tr>
-            </tbody>
-            </table>
-
-           </div>
+            <AssetList 
+              v-if="connectedToWeb3()==true"
+              v-bind:networkName='networkName'
+              v-bind:onSelectedAssetCallback='onSelectedAssetCallback'
+            
+            />
 
 
                  <div class="whitespace-md"></div>
 
 
-             <div id="lava-packet-dropzone " class="lava-packet-dropzone bg-red-200">
-
-               <div class="subtitle is-size-3">Drop Lava Packets Here</div>
-
-               <div class="dropzone"  >
-                  <div class="hand-icon-holder">
-
-                  </div>
-
-                  <div class="dropzone-file-input-container">
-                    <p> Or select a local file </p>
-
-                      <div class="light-box">
-                        <input class="dropzone-file-input" name="lavaPacketFile" type="file">
-                      </div>
-                  </div>
-
-               </div>
-
-
-
-
-             </div>
+           <DropZone v-if="false" />
 
         </div>
       </section>
@@ -134,15 +94,19 @@ import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import Web3NetButton from './components/Web3NetButton.vue'
 
+import AssetList from './components/AssetList.vue'
+import DropZone from './components/DropZone.vue'
+
 export default {
   name: 'Wallet',
-  components: {Navbar, Footer,ActionContainer,Web3NetButton},
+  components: {Navbar, Footer,ActionContainer,Web3NetButton, AssetList, DropZone},
   data() {
     return {
 		selectedActionAsset: null,
-		token_list:  [], 
+	 
 		errorMessage:null,
-    web3Plug: null
+    web3Plug: null,
+    networkName: null
 
     }
   },
@@ -178,12 +142,10 @@ export default {
           this.web3Plug.connectWeb3( )
 
 
-          let networkName = this.web3Plug.getWeb3NetworkName(this.activeNetworkId)
-          console.log('net name', networkName )
+          this.networkName = this.web3Plug.getWeb3NetworkName(this.activeNetworkId)
 
-          let localTokenData = tokenData.networks[networkName]
-
-          this.token_list = Object.values(localTokenData)
+ 
+          console.log('networkName', this.networkName )
     },
 
     connectedToWeb3(){
@@ -202,6 +164,12 @@ export default {
 
         return 'https://etherscan.io'
     },
+
+    onSelectedAssetCallback(asset){
+      console.log('onSelectedAssetCallback', asset )
+
+      this.selectedActionAsset = asset
+    }
 
 
   }

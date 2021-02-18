@@ -21,8 +21,8 @@ export default {
 
     getNetworkName(){
 
-      let providerNetworkID = this.web3Plug.getConnectionState().activeNetworkId
-
+        let providerNetworkID = this.web3Plug.getConnectionState().activeNetworkId
+        
       if(providerNetworkID == 1){
         return 'Mainnet'
       }

@@ -2,7 +2,7 @@
     
 
 
-        <div id="action-container bg-gray-600" class="action-container box" v-cloak v-if="shouldRender && selectedActionAsset"    >
+        <div id="action-container bg-gray-600 px-8" class="action-container box" v-cloak v-if="shouldRender && selectedActionAsset"    >
          Action Container
          
           <div class="token-titlebar flex-bar">
