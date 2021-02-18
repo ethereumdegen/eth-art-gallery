@@ -6,7 +6,7 @@ Version 0.10
 
 */
 
-var EIP712HelperV3 = require("../EIP712HelperV3");
+var EIP712HelperV3 = require("./EIP712HelperV3");
 var web3utils = require('web3-utils')
 
 var sampleLavaPacket = {
@@ -112,7 +112,7 @@ export default class LavaPacketUtils {
      }
 
 
-     static getLavaPackerSigner(  typedData, signature){
+     static recoverLavaPacketSigner(  typedData, signature){
 
        var sigHash = LavaPacketUtils.getLavaTypedDataHash( typedData, typedData.types);
        var msgBuf = ethUtil.toBuffer(signature)

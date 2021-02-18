@@ -6,7 +6,7 @@
 
     },
     "kovan":{
-      "TEST":{"name":"Test Token", "symbol":"TEST", "decimals": 18,  "address":"0x4920677b65Eb3BDCf9379DF75002cb903b2b2936", "imgurl":"/assets/images/tokens/dai.png" } 
+      "TEST":{"name":"Test Token", "symbol":"TEST", "decimals": 18,  "address":"0xf5b71f8d25d3e90b9ec0c08d890853187df4bef4", "imgurl":"/assets/images/tokens/dai.png" } 
 
     }
 

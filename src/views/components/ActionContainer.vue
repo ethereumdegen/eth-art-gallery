@@ -314,7 +314,7 @@ export default {
 
        let currentPermitNonce = 0 
 
-       let inputDataArray = [primaryAddress,primaryAddress, 1,0,true]
+       let inputDataArray = [primaryAddress,primaryAddress, 0,0,true]
 
        const typedData = PermitUtils.getPermitTypedDataFromParams(
             'TEST',
@@ -325,9 +325,9 @@ export default {
        )
         console.log('permit typedData',typedData)
  
-       var stringifiedData = JSON.stringify(  typedData );
+        var stringifiedData = JSON.stringify(  typedData );
 
- 
+        let permitTypedDataHash = PermitUtils.getPermitTypedDataHash(typedData)
 
 
 
