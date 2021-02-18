@@ -25,8 +25,8 @@ export default class PermitUtils {
         ]),
     );
 
-    console.log('meep 1', ethUtil.bufferToHex(EIP712HelperV3.structHash('EIP712Domain', typedData.domain, typedData.types)))
-    console.log('meep 2', ethUtil.bufferToHex(EIP712HelperV3.structHash(typedData.primaryType, typedData.message, typedData.types)))
+    //console.log('meep 1', ethUtil.bufferToHex(EIP712HelperV3.structHash('EIP712Domain', typedData.domain, typedData.types)))
+    //console.log('meep 2', ethUtil.bufferToHex(EIP712HelperV3.structHash(typedData.primaryType, typedData.message, typedData.types)))
     return typedDataHash;
   }
 

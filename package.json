@@ -13,8 +13,10 @@
     "bignumber.js": "^9.0.0",
     "core-js": "^2.6.5",
     "ethereumjs-abi": "^0.6.8",
+    "ethereumjs-util": "^7.0.8",
     "markdown-it": "^11.0.1",
     "portal-vue": "^2.1.0",
+    "regenerator-runtime": "^0.13.7",
     "sass": "^1.32.7",
     "sass-loader": "^10.1.1",
     "tailwindcss": "^1.0.0-beta.4",
@@ -24,6 +26,7 @@
     "web3": "^1.2.11"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.12.17",
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
     "@vue/cli-service": "^3.5.0",

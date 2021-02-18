@@ -1,7 +1,7 @@
-const ethUtil = require('ethereumjs-util');
+//const ethUtil = require('ethereumjs-util');
 const abi = require('ethereumjs-abi');
 
-
+const web3utils = require('web3').utils
 
 export default class EIP712HelperV3{
 
@@ -40,7 +40,7 @@ export default class EIP712HelperV3{
     }
 
     static typeHash(primaryType, types) {
-        return ethUtil.sha3(EIP712HelperV3.encodeType(primaryType, types));
+        return web3utils.soliditySha3(EIP712HelperV3.encodeType(primaryType, types));
     }
 
     static encodeData(primaryType, data, types) {
@@ -56,11 +56,11 @@ export default class EIP712HelperV3{
             let value = data[field.name];
             if (field.type == 'string' || field.type == 'bytes') {
                 encTypes.push('bytes32');
-                value = ethUtil.sha3(value);
+                value = web3utils.soliditySha3(value);
                 encValues.push(value);
             } else if (types[field.type] !== undefined) {
                 encTypes.push('bytes32');
-                value = ethUtil.sha3(EIP712HelperV3.encodeData(field.type, value, types));
+                value = web3utils.soliditySha3(EIP712HelperV3.encodeData(field.type, value, types));
                 encValues.push(value);
             } else if (field.type.lastIndexOf(']') === field.type.length - 1) {
                 throw 'TODO: Arrays currently unimplemented in encodeData';
@@ -74,7 +74,7 @@ export default class EIP712HelperV3{
     }
 
     static structHash(primaryType, data, types) {
-        return ethUtil.sha3(EIP712HelperV3.encodeData(primaryType, data, types));
+        return web3utils.soliditySha3(EIP712HelperV3.encodeData(primaryType, data, types));
     }
 
 
