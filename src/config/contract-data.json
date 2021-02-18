@@ -6,8 +6,8 @@
 
     },
     "kovan":{
-      "TEST":{"name":"Test Token", "symbol":"TEST", "decimals": 18,  "address":"0x7b3a2c7d65c357fa4ccf4ba93d3c0781b843a4f3", "imgurl":"/assets/images/tokens/dai.png" } 
-
+      "TEST":{"name":"Test Token", "symbol":"TEST", "decimals": 18,  "address":"0x7b3a2c7d65c357fa4ccf4ba93d3c0781b843a4f3", "imgurl":"/assets/images/tokens/dai.png" }, 
+      "LavaWallet":{"name":"Lava Wallet", "address":"0x517dcaac724d657411d740d7ff0e7fe932259e68"}
     }
 
   }

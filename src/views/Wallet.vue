@@ -68,7 +68,7 @@
               v-if="connectedToWeb3()==true"
               v-bind:networkName='networkName'
               v-bind:onSelectedAssetCallback='onSelectedAssetCallback'
-            
+              v-bind:web3Plug="web3Plug"
             />
 
 
@@ -91,9 +91,7 @@
  </template>
 
 <script >
-
-const tokenData = require('../config/token-data.json')
-
+ 
 import Web3Plug from '../js/web3Plug.js'
 
 import ActionContainer from './components/ActionContainer.vue'

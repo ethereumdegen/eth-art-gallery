@@ -316,10 +316,12 @@ export default {
 
        let chainId = this.web3Plug.getConnectionState().activeNetworkId
 
+       let expirationTime = 0;
+
        let currentPermitNonce = await myTokenContract.methods.nonces(primaryAddress).call()
         console.log('currentPermitNonce',currentPermitNonce)
 
-       let inputDataArray = [primaryAddress,primaryAddress, currentPermitNonce,0,true]
+       let inputDataArray = [primaryAddress,primaryAddress, currentPermitNonce,expirationTime,true]
 
        const typedData = PermitUtils.getPermitTypedDataFromParams(
             nameOfToken,

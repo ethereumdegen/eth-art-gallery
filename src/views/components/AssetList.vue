@@ -30,11 +30,12 @@
 
 <script>
 
-const tokenData = require('../../config/token-data.json')
+ 
+const tokenList = require('../../config/token-list.json')
 
 export default {
     name: 'AssetList',
-    props:['networkName','onSelectedAssetCallback'],
+    props:['networkName','web3Plug','onSelectedAssetCallback'],
   data() {
     return {
      
@@ -47,12 +48,17 @@ export default {
 
   methods: {
     getTokenList(){ 
+ 
 
-      let localTokenData = tokenData.networks[this.networkName]
+       let tokens = tokenList.networks[this.networkName]
 
-      let tokenList = Object.values(localTokenData)
+       let contractData = this.web3Plug.getContractDataForActiveNetwork() 
 
-       return tokenList
+         
+       let tokenDataArray = tokens.map(x =>  contractData["TEST"] )
+
+ 
+       return tokenDataArray
 
     },
     clickedAsset(asset){

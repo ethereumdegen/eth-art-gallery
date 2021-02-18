@@ -4,7 +4,7 @@
 //var _0xBitcoinABI = require('../contracts/_0xBitcoinToken.json')
 var permissibleTokenABI = require('../contracts/PermissibleToken.json')
 
-var tokenData = require('../config/token-data.json')
+//var tokenData = require('../config/token-data.json')
 //var defaultTokens = require('../config/default-tokens.json')
 
 var defaultTokenData;

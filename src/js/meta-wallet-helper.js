@@ -23,7 +23,7 @@ var permissibleTokenABI = require('../contracts/PermissibleToken.json')
 //var _0xBitcoinABI = require('../contracts/_0xBitcoinToken.json')
 //var erc20TokenABI = require('../contracts/ERC20Interface.json')
 
-var tokenData = require('../config/token-data.json')
+//var tokenData = require('../config/token-data.json')
 //var defaultTokens = require('../config/default-tokens.json')
 //var lavaSeedNodes = require('../config/lava-seed-nodes.json')
 
