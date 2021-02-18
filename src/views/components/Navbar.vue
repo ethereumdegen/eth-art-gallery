@@ -1,11 +1,11 @@
 <template>
   <div data-collapse="small" data-animation="default" data-duration="400" class="navbar w-nav">
-    <div class="bg-gray-900 lg:bg-transparent">
+    <div class="bg-gray-900  ">
     <div class="container w-container">
-      <div class="w-full w-clearfix">
+      <div class="w-full w-clearfix" style="min-height:70px">
         <a href="/" class="brand w-nav-brand w--current">
-          <img src="/assets/images/logo.png" height="35"  alt="" class="w-6 m-2">
-          <div class=" text-block-10">0xBitcoin</div>
+          <img src="/assets/images/logo.png" height="35"  alt="" class="w-6 m-2 inline">
+          <div class=" text-block-10 inline">Meta Wallet</div>
        </a>
 
        <div class="hidden lg:inline-block  ">
