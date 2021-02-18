@@ -99,7 +99,8 @@ export default class PermitUtils {
          
 
        let myTokenContract = web3Plug.getCustomContract(web3Plug.web3, permissibleTokenABI, args.tokenAddress)
- 
+
+       console.log('myTokenContract',myTokenContract)
  
        let nameOfToken = await myTokenContract.methods.name().call()
 
@@ -110,9 +111,7 @@ export default class PermitUtils {
        let currentPermitNonceResult = await myTokenContract.methods.nonces(args.permitFrom).call()
        
        let currentPermitNonce = parseInt( currentPermitNonceResult )
-       if(isNaN(currentPermitNonce)){
-        currentPermitNonce = 0
-       }
+       
 
        let inputDataArray = [args.permitFrom,args.permitTo, currentPermitNonce,args.expires,args.allowed]
 
