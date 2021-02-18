@@ -6,7 +6,7 @@ Version 0.10
 
 */
 
-var EIP712HelperV3 = require("./EIP712HelperV3");
+var EIP712HelperV3 = require("../EIP712HelperV3");
 var web3utils = require('web3-utils')
 
 var sampleLavaPacket = {
@@ -24,7 +24,7 @@ var sampleLavaPacket = {
 }
 
 
-export default class MetaPacketUtils {
+export default class LavaPacketUtils {
 
 
 

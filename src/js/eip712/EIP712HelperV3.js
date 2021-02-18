@@ -3,7 +3,7 @@ const abi = require('ethereumjs-abi');
 
 
 
-module.exports = class EIP712HelperV3{
+export default class EIP712HelperV3{
 
     // Recursively finds all the dependencies of a type
     static  dependencies(primaryType, types, found = []) {
@@ -75,6 +75,38 @@ module.exports = class EIP712HelperV3{
 
     static structHash(primaryType, data, types) {
         return ethUtil.sha3(EIP712HelperV3.encodeData(primaryType, data, types));
+    }
+
+
+    static async signTypedData(web3, signer,data )
+    {
+      var result = await new Promise(async resolve => {
+  
+              web3.currentProvider.sendAsync(
+                {
+                    method: "eth_signTypedData_v3",
+                    params: [signer, data],
+                    from: signer
+                },
+                function(err, result) {
+                    if (err) {
+                        return console.error(err);
+                    }    const signature = result.result.substring(2);
+                    const r = "0x" + signature.substring(0, 64);
+                    const s = "0x" + signature.substring(64, 128);
+                    const v = parseInt(signature.substring(128, 130), 16);    // The signature is now comprised of r, s, and v.
+                    console.log({r: r, s:s, v: v })
+                    console.log('sign returned ',   result)
+                    resolve(result.result )
+                    }
+                );
+  
+       
+  
+  
+        });
+  
+        return result;
     }
 
 

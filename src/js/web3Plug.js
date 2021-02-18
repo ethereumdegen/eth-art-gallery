@@ -130,6 +130,19 @@ export default class Web3Plug {
   }
 
 
+  getContractDataForActiveNetwork( ){
+
+    let networkId = this.getConnectionState().activeNetworkId
+
+    let netName = this.getWeb3NetworkName(networkId)
+
+    if(netName){
+        return contractData.networks[netName] 
+    }
+
+    return undefined
+  }
+
   getContractDataForNetworkID(networkId){
     let netName = this.getWeb3NetworkName(networkId)
 
@@ -147,15 +160,7 @@ export default class Web3Plug {
     return accounts;
   }
 
-
-  getTokenContract(web3, contractAddress)
-  {
-
-    var tokenContract = new web3.eth.Contract(tokenContractABI,contractAddress)
-
-    return tokenContract;
-  }
-
+ 
 
   getCustomContract(web3, contractABI, contractAddress)
   {

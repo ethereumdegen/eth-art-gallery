@@ -228,10 +228,16 @@
 </template>
 
 <script>
+
+import  PermitUtils from '../../js/eip712/permit-utils.js' 
+import  EIP712HelperV3 from '../../js/eip712/EIP712HelperV3.js' 
+
+
+const permissibleTokenABI = require('../../abi/PermissibleToken.json')
  
 export default {
   name: 'ActionContainer',
-  props: ['shouldRender','selectedActionAsset'],
+  props: ['shouldRender','selectedActionAsset', 'web3Plug'],
   components: { },
   data() {
     return {
@@ -258,8 +264,76 @@ export default {
           this.selectedActionType = name
       },
 
-      actionPermitTokens(){
-          console.log('permit!!')
+      async actionPermitTokens(){
+          console.log('permit!!', this.permitTokenQuantity, this.selectedActionAsset)
+
+        let assetData = this.selectedActionAsset
+
+        let allAccounts = await this.web3Plug.getConnectedAccounts() 
+        let primaryAddress = allAccounts[0]
+
+        console.log('addr', primaryAddress)
+
+         //let contractData = this.web3Plug.getContractDataForActiveNetwork()
+
+        let myTokenContract = this.web3Plug.getCustomContract(window.web3, permissibleTokenABI,  assetData.address)
+ 
+
+    /*
+
+ // EIP712 niceties
+    bytes32 public DOMAIN_SEPARATOR;
+    // bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
+    bytes32 public constant PERMIT_TYPEHASH = 0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb;
+
+
+     require(_chainId != 0);
+        DOMAIN_SEPARATOR = keccak256(
+            abi.encode(
+                keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
+                keccak256(bytes(_name)),
+                keccak256(bytes(version)),
+                _chainId,
+                address(this)
+            )
+        );*/
+
+        /*
+       bytes32 digest = keccak256(
+            abi.encodePacked(
+                "\x19\x01",
+                DOMAIN_SEPARATOR,
+                keccak256(abi.encode(PERMIT_TYPEHASH, _holder, _spender, _nonce, _expiry, _allowed))
+            )
+        );
+
+        */
+
+       let currentPermitNonce = 0 
+
+       const typedData = PermitUtils.getPermitTypedDataFromParams(
+            'TEST',
+            0x2a,  //0x2a 
+            assetData.address,
+
+            primaryAddress,
+            primaryAddress,
+            currentPermitNonce+1,  //need to read nonces of this holder from contract 
+            0,
+            true
+       )
+        console.log('permit typedData',typedData)
+ 
+       var stringifiedData = JSON.stringify(  typedData );
+
+ 
+
+
+        let result = await  EIP712HelperV3.signTypedData( window.web3, primaryAddress, stringifiedData  )
+        console.log( result )
+                
+
+
       },
 
       actionLavaTransfer(){

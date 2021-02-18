@@ -57,7 +57,7 @@
           <ActionContainer
             v-bind:shouldRender="true"
             v-bind:selectedActionAsset="selectedActionAsset"
-
+            v-bind:web3Plug="web3Plug"
            />
 
 
