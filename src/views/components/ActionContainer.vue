@@ -312,9 +312,10 @@ export default {
 
         */
 
-       let currentPermitNonce = 0 
+       let currentPermitNonce = await myTokenContract.methods.nonces(primaryAddress).call()
+        console.log('currentPermitNonce',currentPermitNonce)
 
-       let inputDataArray = [primaryAddress,primaryAddress, 0,0,true]
+       let inputDataArray = [primaryAddress,primaryAddress, currentPermitNonce,0,true]
 
        const typedData = PermitUtils.getPermitTypedDataFromParams(
             'TEST',
@@ -331,52 +332,11 @@ export default {
 
 
 
-        let signature = await  EIP712HelperV3.signTypedData( window.web3, primaryAddress, stringifiedData  )
-        console.log( signature )  
+        let signResult = await  EIP712HelperV3.signTypedData( window.web3, primaryAddress, stringifiedData  )
+        console.log( 'signResult', signResult )  
             
 
-        let signHash = EIP712SignPermit.signHash(typedData)
-
-            
-        //let actualDomainSeparator = 0x2c8b239014107b10523ebb8bfbdf54768e1d0c91dc7cb9e32528db4340122ebf
- 
-
-        console.log('domainseparator',ethUtil.bufferToHex(EIP712SignPermit.structHash('EIP712Domain', typedData.domain)))
-         console.log('hash2',ethUtil.bufferToHex(EIP712SignPermit.structHash(typedData.primaryType, typedData.message)))
-
-
-        //hash2 must be bad 
-
-     
-        console.log('meep signhash ', signHash)
         
-        
-        //bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
-        
-        let permitTypehash = window.web3.utils.soliditySha3( "Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)" )
-
-             console.log('meep permitTypehash ', permitTypehash) //this is correct 
-
-
-             let HashTwo = window.web3.utils.soliditySha3( permitTypehash, ...inputDataArray     )
-            console.log('hashTwo', HashTwo)
-    /*   
-
-         let digest = web3.sha3( "\x19\x01" + DOMAIN_SEPARATOR + web3.sha3(PERMIT_TYPEHASH, ...inputDataArray   ) )
-
-         console.log(digest)*/
-
-
-           window.web3.eth.personal.ecRecover(stringifiedData,signature, function(error, result){
-                    if(!error)
-                        console.log('ecrecover', result)
-                    else
-                        console.error(error);
-                }) 
-
-        //require(_holder == ecrecover(digest, _v, _r, _s));
-
-                
 
 
       },

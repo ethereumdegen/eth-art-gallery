@@ -98,7 +98,7 @@ export default class EIP712HelperV3{
                     const v = parseInt(signature.substring(128, 130), 16);    // The signature is now comprised of r, s, and v.
                     console.log({r: r, s:s, v: v })
                     console.log('sign returned ',   result)
-                    resolve(result.result )
+                    resolve({ signature: result.result, v:v, r:r, s:s  } )
                     }
                 );
   
