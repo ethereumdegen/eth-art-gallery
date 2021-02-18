@@ -105,20 +105,21 @@
                 <div class="  flex-grow">
                     <div> Meta Packet </div> 
                     <textarea class="text-black" v-model="permitMetaData"></textarea>
-                     </div>
+                 </div>
+
+                 
                 <div class="  flex-grow">
                     
 
                       <div class="button inline-block bg-purple-500 hover:bg-purple-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-if="permitMetaData" v-on:click="actionSubmitPermit"> Submit Meta Tx </div>
 
-                      <div class="loader inline-block" v-if="pendingTransaction"> 
-                       
-                      </div>
+                      <div class="loader inline-block" v-if="pendingTransaction">  </div>
 
 
 
-                         </div>
-              </div>
+                 </div>
+             </div>
+                
             </div>
 
 
@@ -138,8 +139,8 @@
               <div class="whitespace-sm"></div>
 
 
-                <div class="flex flex-row ">
-                    <div class="flex-grow">
+                <div class="flex flex-row w-full">
+                    <div class="w-1/2 p-4">
 
 
 
@@ -169,7 +170,7 @@
                           <div class="label">Relay Authority</div>
 
                          <div class="select">
-                            <select class=" " onchange=" " v-model="relayKingRequired" placeholder="">
+                            <select class=" " onchange=" " v-model="relayAuthorityType" placeholder="">
                               <option>any relayers</option>
                            </select>
                          </div>
@@ -187,26 +188,30 @@
            
 
                      </div>
-                   <div class="flex-grow">
+                   <div class="w-1/2 p-4 ">
+
+                       
+                        
+
                        <div class="is-size-6">   </div>
 
-                       <p v-if="lavaPacketExists"> Specify the URL for a Lava Network Node and broadcast this packet to the Lava Network Relayers.  They will submit the packet to the Ethereum Network if the reward is high enough.  </p>
+                       <p v-if="lavaMetadata"> Specify the URL for a Lava Network Node and broadcast this packet to the Lava Network Relayers.  They will submit the packet to the Ethereum Network if the reward is high enough.  </p>
 
-                       <div class="form-group padding-md" v-if="lavaPacketExists">
+                       <div class="form-group padding-md" v-if="lavaMetadata">
                            <div class="label">Relay Node URL</div>
-                           <input class="input input-short is-primary" v-model="relayNodeURL" placeholder="xxx.xxx.xxx.xxx:yyyy">
+                           <input class="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline" v-model="relayNodeURL" placeholder="xxx.xxx.xxx.xxx:yyyy">
                            <a v-bind:href="relayNodeURL"> Visit Relay Website </a>
 
 
                              <div class="whitespace-sm"></div>
 
-                           <div id="btn-broadcast-lava-packet" v-if="lavaPacketExists">
-                             <div class="button is-primary btn-broadcast-lava-packet">Broadcast Lava Packet</div>
+                           <div id="btn-broadcast-lava-packet" v-if="lavaMetadata">
+                             <div class="button inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-bind:click="actionBroadcastLavaPacket">Broadcast Lava Packet To Relay</div>
                            </div>
 
                            <div class="whitespace-sm"></div>
 
-                           <div class="subtitle color-primary has-text-centered" v-cloak v-if="lavaPacketExists" >
+                           <div class="subtitle color-primary has-text-centered" v-cloak v-if="lavaMetadata && broadcastMessage" >
                              {{ broadcastMessage }}
                            </div>
                        </div>
@@ -216,19 +221,23 @@
 
                       <div class="whitespace-sm"></div>
 
-                       <div class="form-group padding-md" v-if="lavaPacketExists">
-                           <div class="label">Lava Packet Data</div>
-                           <textarea class="textarea" placeholder="Lava packet data" rows="10"  v-model="lavaPacketData" ></textarea>
-
+                       <div class="form-group padding-md" v-if="lavaMetadata">
+                           <div> Meta Packet </div> 
+                          <textarea class="text-black" v-model="lavaMetadata"></textarea>
+                       
                        </div>
 
 
 
 
-                               <div class="whitespace-sm"></div>
+                      <div class="whitespace-sm"></div>
 
-                               <div id="btn-download-lava-packet" v-if="lavaPacketExists">
-                               </div>
+                       <div class="button inline-block bg-purple-500 hover:bg-purple-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-if="lavaMetadata" v-on:click="actionSubmitLava"> Submit Lava Tx </div>
+
+                      <div class="loader inline-block" v-if="pendingTransaction">  </div>
+
+
+
                    </div>
               </div>
            </div>
@@ -249,6 +258,7 @@ import LavaPacketUtils from '../../js/eip712/lavapacket-utils.js'
  
 
 const permissibleTokenABI = require('../../abi/PermissibleToken.json')
+const lavaWalletABI = require('../../abi/LavaWallet.json')
  const ethUtil = require('ethereumjs-util')
 
 
@@ -270,10 +280,12 @@ export default {
         transferTokenRecipient:null,
         transferTokenMethod:'transfer',
          transferTokenRelayReward:null,
-         relayKingRequired:['any relayers'],
+         relayAuthorityType:['any relayers'],
 
+        relayNodeURL:null,
+        broadcastMessage: null, //msg back from relay 
 
-        lavaPacketExists: false 
+        lavaMetadata: null 
     }
   },
   methods: {
@@ -365,6 +377,7 @@ export default {
 
       },
 
+    
       async actionSignLavaPacket(){
           console.log('SignLavaPacket!!')
 
@@ -399,7 +412,62 @@ export default {
           console.log('signResult',signResult)
 
 
+          this.lavaMetadata = JSON.stringify( 
+              Object.assign( lavaPacketInputData , { signature: signResult.signature })
+            )
+
+
+      },
+
+        async actionSubmitLava(){
+            let assetData = this.selectedActionAsset
+
+            let allAccounts = await this.web3Plug.getConnectedAccounts() 
+            let primaryAddress =  window.web3.utils.toChecksumAddress( allAccounts[0] ) 
+
+
+            let contractData = this.web3Plug.getContractDataForActiveNetwork();
+
+            let lavaWalletAddress = contractData['LavaWallet'].address
+            
+            let lavaWalletContract = this.web3Plug.getCustomContract(this.web3Plug.web3, lavaWalletABI, lavaWalletAddress)
+
+             let metadata = JSON.parse(this.lavaMetadata)
+
+            console.log('metadata' , metadata)
+
+              delete metadata['walletAddress']; 
+ 
+
+            let lavaArgs = Object.values(  metadata  )
+
+              console.log('lavaArgs' , lavaArgs)
+ 
+
+            this.pendingTransaction = true
+
+            let txResult = await lavaWalletContract.methods.transferTokensWithSignature(...lavaArgs).send({from: primaryAddress}) 
+
+            console.log('txResult', txResult)
+
+            this.permitMetaData = null 
+            this.pendingTransaction = false
+
+      },
+
+
+      actionBroadcastLavaPacket(){
+
+        console.log('broadcast lava packet ')
       }
+
+
+
+
+
+
+
+
   }
 }
 </script>
