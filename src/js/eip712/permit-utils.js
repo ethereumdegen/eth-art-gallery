@@ -107,8 +107,10 @@ export default class PermitUtils {
 
        let expirationTime = 0;
 
-       let currentPermitNonce = await myTokenContract.methods.nonces(args.permitFrom).call()
-        console.log('currentPermitNonce',currentPermitNonce)
+       let currentPermitNonceResult = await myTokenContract.methods.nonces(args.permitFrom).call()
+       
+       let currentPermitNonce = parseInt( currentPermitNonceResult )
+       console.log('currentPermitNonce',currentPermitNonce)
 
        let inputDataArray = [args.permitFrom,args.permitTo, currentPermitNonce,args.expires,args.allowed]
 
