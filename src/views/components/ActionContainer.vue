@@ -312,14 +312,18 @@ export default {
 
         */
 
+       let nameOfToken = await myTokenContract.methods.name().call()
+
+       let chainId = this.web3Plug.getConnectionState().activeNetworkId
+
        let currentPermitNonce = await myTokenContract.methods.nonces(primaryAddress).call()
         console.log('currentPermitNonce',currentPermitNonce)
 
        let inputDataArray = [primaryAddress,primaryAddress, currentPermitNonce,0,true]
 
        const typedData = PermitUtils.getPermitTypedDataFromParams(
-            'TEST',
-            0x2a,  //0x2a 
+            nameOfToken,
+            chainId,  //0x2a for Kovan
             window.web3.utils.toChecksumAddress(assetData.address),  //IMPORTANT 
 
             ...inputDataArray  //unpack the array 
