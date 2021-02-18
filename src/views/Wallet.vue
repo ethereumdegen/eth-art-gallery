@@ -22,7 +22,14 @@
 
 
 
-      <section class="hero  bg-gray-400 flex px-4"  >
+      <section class="hero  bg-gray-400 flex px-4 text-black"  >
+
+         <div class="token-titlebar flex p-2" v-if="selectedActionAsset">
+                
+
+                <div class="token-icon  "> <img  v-bind:src="selectedActionAsset.imgurl" height="24" width="24"  ></img> </div>
+                <div class="token-title px-4 "> {{ selectedActionAsset.name }} </div>
+          </div>
 
           <div class="flex-grow"></div>
           <div class="inline-block">
@@ -156,7 +163,7 @@ export default {
 
        getEtherscanBaseURL(){
 
-          let providerNetworkID = this.web3Plug.getConnectionState().activeNetworkId
+        let providerNetworkID = this.web3Plug.getConnectionState().activeNetworkId
 
         if( providerNetworkID == 42){
           return  'https://kovan.etherscan.io'

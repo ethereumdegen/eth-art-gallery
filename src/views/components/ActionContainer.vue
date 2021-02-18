@@ -2,41 +2,38 @@
     
 
 
-        <div id="action-container bg-gray-600 px-8" class="action-container box" v-cloak v-if="shouldRender && selectedActionAsset"    >
-         Action Container
+        <div id="action-container" class="action-container box  bg-gray-600 px-8" v-cloak v-if="shouldRender && selectedActionAsset"    >
+          
          
-          <div class="token-titlebar flex-bar">
-                <div class="token-title flex-start"> {{ selectedActionAsset.name }} </div>
+         
+          <div class="tabs flex flex-col sm:flex-row">
 
-                <div class="token-icon flex-end"> <img  v-bind:src="selectedActionAsset.icon_url" height="42" width="42" ></img> </div>
-          </div>
-          <div class="action-tabs-bar">
+            <div class="tab ext-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer"  v-bind:class="{   'active':(selectedActionType=='permit')  } " >
 
-            <div class="tabs is-toggle hide-overflow"  >
-
-
-
-              <ul class="columns">
-                <li data-action-type="approve"  v-bind:class="{ 'tab-action':true,  'column':true, 'column-button':true, 'is-active':(selectedActionType=='approve')  } ">
+ 
                   <a>
-                    <span class="icon is-small">   <i class="material-icons">file_download</i> </span>
-                    <span>Approve For Lava</span>
+                    <div class="icon is-small inline">   <i class="material-icons">file_download</i> </div>
+                    <div class="inline ">Permit For Lava</div>
                   </a>
-                </li>
+                 
+
+                 </div>
+
+                   <div class="tab ext-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer"  v-bind:class="{   'active':(selectedActionType=='lavatransfer')  } " >
 
 
-
-                <li data-action-type="lavatransfer" v-bind:class="{  'tab-action':true, 'column':true, 'column-button':true,  'is-active':(selectedActionType=='lavatransfer')  } ">
-                  <a>
-                    <span class="icon is-small one-third"> <i class="material-icons">fast_forward</i> </span>
-                    <span>Lava Transfer</span>
+            <a>
+                    <div class="icon is-small one-third inline"> <i class="material-icons">fast_forward</i> </div>
+                    <div class="inline " >Lava Transfer</div>
                   </a>
-                </li>
+                
+ 
+            </div>   
 
-              </ul>
+
             </div>
 
-          </div>
+         
           <div class="deposit-container" v-if="(selectedActionType=='deposit')" v-cloak>
 
 
@@ -228,7 +225,7 @@ export default {
   components: { },
   data() {
     return {
-      
+        selectedActionType: 'permit' 
     }
   },
   methods: {
