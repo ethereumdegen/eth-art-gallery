@@ -109,8 +109,14 @@
                 <div class="  flex-grow">
                     
 
-                      <div class="button inline-block bg-purple-500 hover:bg-purple-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-on:click="actionPermitTokens"> Submit Meta Tx </div>
-           
+                      <div class="button inline-block bg-purple-500 hover:bg-purple-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-if="permitMetaData" v-on:click="actionSubmitPermit"> Submit Meta Tx </div>
+
+                      <div class="loader inline-block" v-if="pendingTransaction"> 
+                       
+                      </div>
+
+
+
                          </div>
               </div>
             </div>
@@ -251,11 +257,11 @@ export default {
   data() {
     return {
 
-       
+        pendingTransaction: false,
 
         selectedActionType: 'permit' ,
         permitTokenQuantity:null,
-        permitMetaData: {},
+        permitMetaData: null,
 
 
         transferTokenQuantity:null,
@@ -281,9 +287,7 @@ export default {
 
         let allAccounts = await this.web3Plug.getConnectedAccounts() 
         let primaryAddress =  window.web3.utils.toChecksumAddress( allAccounts[0] ) 
-
-        console.log('addr', primaryAddress)
-
+ 
         let contractData = this.web3Plug.getContractDataForActiveNetwork();
         let lavaContractAddress = contractData['LavaWallet'].address
        
@@ -303,16 +307,60 @@ export default {
 
        this.permitMetaData = JSON.stringify({
 
-         from: permitInputData.permitFrom,
-         to: permitInputData.permitTo,
-         tokenAddress: permitInputData.tokenAddress,
-         expires: permitInputData.expires,
-         allowed: permitInputData.allowed,
-                  
+         from: signResult.from,
+         to: signResult.to,
+         tokenAddress: signResult.tokenAddress,
+         nonce: signResult.nonce,
+         expires: signResult.expires,
+         allowed: signResult.allowed, 
          signature: signResult.signature
-       })
-        
+       }) 
 
+
+      },
+
+
+      async actionSubmitPermit(){
+
+         let assetData = this.selectedActionAsset
+
+        let allAccounts = await this.web3Plug.getConnectedAccounts() 
+        let primaryAddress =  window.web3.utils.toChecksumAddress( allAccounts[0] ) 
+
+
+        let contractData = this.web3Plug.getContractDataForActiveNetwork();
+        
+         let myTokenContract = this.web3Plug.getCustomContract(this.web3Plug.web3, permissibleTokenABI, assetData.address)
+
+          let metadata = JSON.parse(this.permitMetaData)
+
+        console.log('metadata' , metadata)
+          let VRS = EIP712HelperV3.signatureToVRS(metadata.signature)
+
+
+         let permitArgs = [
+          metadata.from,
+          metadata.to,
+          metadata.nonce,
+          metadata.expires,
+          metadata.allowed,
+          VRS.v,
+          VRS.r,
+          VRS.s          
+          ]
+
+          console.log('myTokenContract',myTokenContract)
+          console.log('permissibleTokenABI',permissibleTokenABI)
+
+
+         this.pendingTransaction = true
+
+         let txResult = await myTokenContract.methods.permit(...permitArgs).send({from: primaryAddress}) 
+
+         console.log('txResult', txResult)
+
+         this.permitMetaData = null 
+         this.pendingTransaction = false
 
       },
 

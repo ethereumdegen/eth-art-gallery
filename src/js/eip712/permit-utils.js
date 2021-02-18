@@ -128,8 +128,17 @@ export default class PermitUtils {
 
 
         let signResult = await  EIP712HelperV3.signTypedData( web3Plug.web3, args.permitFrom, stringifiedData  )
+        
+        
+        signResult.tokenAddress = args.tokenAddress
+        signResult.from = args.permitFrom 
+        signResult.to = args.permitTo 
+        signResult.expires = args.expires 
+        signResult.allowed = args.allowed  
+        signResult.nonce = currentPermitNonce
+
         console.log( 'signResult', signResult )  
-            
+
         return signResult
 
 

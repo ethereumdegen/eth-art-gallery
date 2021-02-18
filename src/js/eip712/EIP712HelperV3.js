@@ -79,6 +79,10 @@ export default class EIP712HelperV3{
 
 
     static signatureToVRS(signature){
+        if(signature.startsWith('0x')){
+            signature = signature.substring(2);  
+        }
+       
         const r = "0x" + signature.substring(0, 64);
         const s = "0x" + signature.substring(64, 128);
         const v = parseInt(signature.substring(128, 130), 16); 
