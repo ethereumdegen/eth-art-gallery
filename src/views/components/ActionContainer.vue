@@ -127,8 +127,8 @@
               <div class="whitespace-sm"></div>
 
 
-                <div class="columns">
-                    <div class="column">
+                <div class="flex flex-row ">
+                    <div class="flex-grow">
 
 
 
@@ -174,7 +174,7 @@
                         <div class="button is-primary btn-action-lava-transfer" v-on:click="actionLavaTransfer"> Sign </div>
 
                      </div>
-                   <div class="column">
+                   <div class="flex-grow">
                        <div class="is-size-6">   </div>
 
                        <p v-if="lavaPacketExists"> Specify the URL for a Lava Network Node and broadcast this packet to the Lava Network Relayers.  They will submit the packet to the Ethereum Network if the reward is high enough.  </p>
@@ -236,14 +236,20 @@ export default {
   data() {
     return {
 
-         
+       
 
         selectedActionType: 'permit' ,
         permitTokenQuantity:null,
 
 
         transferTokenQuantity:null,
-        transferTokenMethod:'transfer'
+        transferTokenRecipient:null,
+        transferTokenMethod:'transfer',
+         transferTokenRelayReward:null,
+         relayKingRequired:['any relayers'],
+
+
+        lavaPacketExists: false 
     }
   },
   methods: {
@@ -254,6 +260,10 @@ export default {
 
       actionPermitTokens(){
           console.log('permit!!')
+      },
+
+      actionLavaTransfer(){
+          console.log('actionLavaTransfer!!')
       }
   }
 }
