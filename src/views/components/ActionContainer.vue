@@ -6,9 +6,12 @@
           
          
          
-          <div class="tabs flex flex-col sm:flex-row">
+          <div class="tabs flex flex-col sm:flex-row select-none">
 
-            <div class="tab ext-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer"  v-bind:class="{   'active':(selectedActionType=='permit')  } " >
+            <div class="tab bg-gray-700 text-gray-300 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer"  
+            v-bind:class="{   'text-blue-500 bg-gray-800':(selectedActionType=='permit')  } " 
+            @click="selectAction('permit')"
+            >
 
  
                   <a>
@@ -19,7 +22,10 @@
 
                  </div>
 
-                   <div class="tab ext-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer"  v-bind:class="{   'active':(selectedActionType=='lavatransfer')  } " >
+                   <div class="tab bg-gray-700 text-gray-300 py-4 px-6 block hover:text-blue-500 focus:outline-none cursor-pointer" 
+                    v-bind:class="{   'text-blue-500 bg-gray-800':(selectedActionType=='lavatransfer')  } " 
+                   @click="selectAction('lavatransfer')"
+                    >
 
 
             <a>
@@ -33,7 +39,7 @@
 
             </div>
 
-         
+         <!-- 
           <div class="deposit-container" v-if="(selectedActionType=='deposit')" v-cloak>
 
 
@@ -52,7 +58,7 @@
                  <div class="columns">
                      <div class="column">
                        <div class="form-group">
-                         <input class="input input-short is-primary" v-model="depositTokenQuantity" placeholder="token amount">
+                         <input class="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline" v-model="depositTokenQuantity" placeholder="token amount">
                           <div class="button is-primary btn-action-deposit"> Deposit </div>
                        </div>
                       </div>
@@ -68,7 +74,7 @@
                  <div class="columns">
                      <div class="column">
                        <div class="form-group">
-                         <input class="input input-short is-primary" v-model="approveAndDepositTokenQuantity" placeholder="token amount">
+                         <input class="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline" v-model="approveAndDepositTokenQuantity" placeholder="token amount">
                           <div class="button is-primary btn-action-approve-and-deposit"> Deposit </div>
                        </div>
                       </div>
@@ -81,30 +87,34 @@
 
 
           </div>
-          <div class="approve-container" v-if="(selectedActionType=='approve')" v-cloak>
+          -->
+          <div class="approve-container m-4 p-4" v-if="(selectedActionType=='permit')" v-cloak>
 
-            <div class="subtitle-banner has-background-info has-text-light"> External Balance: {{ selectedActionAsset.wallet_balance_formatted }} </div>
-
+           
             <div class="input-container padding-md"   >
               <div class="label">Approve Tokens</div>
 
-              <div class="columns">
-                <div class="column">
+              <div class="flex flex-row">
+                <div class=" flex-grow ">
                   <div class="form-group">
-                      <input type="text" class="input input-short is-primary " v-model="approveTokenQuantity" placeholder="token amount">
-                      <div class="button is-primary btn-action-approve" v-on:click="actionApproveTokens"> Approve </div>
+                      <input type="text" class="  h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline " v-model="permitTokenQuantity" placeholder="token amount">
+                      <div class="button inline-block bg-green-500 hover:bg-green-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-on:click="actionPermitTokens"> Permit </div>
+           
                   </div>
                 </div>
-                <div class="column">
+                <div class="  flex-grow">
+                     <div class="is-size-6"> Balance: {{ selectedActionAsset.wallet_balance_formatted }} </div>
                     <div class="is-size-6"> Quantity Approved: {{ selectedActionAsset.approved_balance_formatted }} </div>
-                </div>
+                         </div>
               </div>
             </div>
 
 
 
           </div>
-          <div class="lava-transfer-container bg-gray-600" v-if="(selectedActionType=='lavatransfer')" v-cloak>
+
+
+          <div class="lava-transfer-container  m-4 p-4" v-if="(selectedActionType=='lavatransfer')" v-cloak>
 
             <div class="subtitle-banner has-background-orange has-text-light"> Approved Balance: {{ selectedActionAsset.approved_balance_formatted }} </div>
 
@@ -135,12 +145,12 @@
 
                       <div class="form-group padding-md">
                           <div class="label">Amount</div>
-                          <input class="input input-short is-primary" v-model="transferTokenQuantity" placeholder="token amount">
+                          <input class="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline" v-model="transferTokenQuantity" placeholder="token amount">
                       </div>
 
                       <div class="form-group padding-md">
                           <div class="label">Recipient</div>
-                          <input class="input is-primary" v-model="transferTokenRecipient" placeholder="token recipient">
+                          <input class="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline" v-model="transferTokenRecipient" placeholder="token recipient">
                       </div>
 
 
@@ -157,7 +167,7 @@
                       <div class="form-group padding-md">
                           <div class="label">Relay Reward (tokens)</div>
                           <div><span> Optional </span></div>
-                          <input class="input input-short is-primary" v-model="transferTokenRelayReward" placeholder="token relay reward">
+                          <input class="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline" v-model="transferTokenRelayReward" placeholder="token relay reward">
                       </div>
 
                       <div class="whitespace-sm"></div>
@@ -225,10 +235,26 @@ export default {
   components: { },
   data() {
     return {
-        selectedActionType: 'permit' 
+
+         
+
+        selectedActionType: 'permit' ,
+        permitTokenQuantity:null,
+
+
+        transferTokenQuantity:null,
+        transferTokenMethod:'transfer'
     }
   },
   methods: {
+
+      selectAction(name){
+          this.selectedActionType = name
+      },
+
+      actionPermitTokens(){
+          console.log('permit!!')
+      }
   }
 }
 </script>
