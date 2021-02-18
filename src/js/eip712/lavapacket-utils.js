@@ -5,14 +5,13 @@ javascript library for NODEJS
 Version 0.10
 
 */
-
-var EIP712HelperV3 = require("./EIP712HelperV3");
+import EIP712HelperV3 from "./EIP712HelperV3" 
 var web3utils = require('web3-utils')
 
 var sampleLavaPacket = {
   method: "transfer",
   from: "0xb11ca87e32075817c82cc471994943a4290f4a14",
-  relayAuthority: "0x0",
+  relayAuthority: "0x0000000000000000000000000000000000000000",
   to: "0x357FfaDBdBEe756aA686Ef6843DA359E2a85229c",
   walletAddress:"0x1d0d66272025d7c59c40257813fc0d7ddf2c4826",
   tokenAddress:"0x9d2cc383e677292ed87f63586086cff62a009010",
@@ -51,6 +50,10 @@ export default class LavaPacketUtils {
       }
 
 
+    }
+
+    static generateRandomNonce( ){
+      return web3utils.randomHex(16)
     }
 
     /*static lavaPacketHasValidSignature(packetData){
@@ -150,7 +153,7 @@ export default class LavaPacketUtils {
     }
 
 
-    static getLavaTypedDataFromParams(   methodName,relayAuthority,from,
+    static getLavaTypedDataFromParams( _chainId,  methodName,relayAuthority,from,
       to,walletAddress,tokenAddress, tokenAmount, relayerRewardTokens,expires,nonce )
     {
       const typedData = {
@@ -168,8 +171,7 @@ export default class LavaPacketUtils {
                       { name: 'to', type: 'address' },
                       { name: 'wallet', type: 'address' },
                       { name: 'token', type: 'address' },
-                      { name: 'tokens', type: 'uint256' },
-                      //{ name: 'relayerRewardToken', type: 'address' },
+                      { name: 'tokens', type: 'uint256' },                    
                       { name: 'relayerRewardTokens', type: 'uint256' },
                       { name: 'expires', type: 'uint256' },
                       { name: 'nonce', type: 'uint256' }
@@ -179,18 +181,17 @@ export default class LavaPacketUtils {
               domain: {
                   contractName: 'Lava Wallet',
                   version: '1',
-                  chainId: 1,  // change me
-                  verifyingContract: walletAddress
+                  chainId: _chainId,  
+                  verifyingContract: web3utils.toChecksumAddress(walletAddress)
               },
               message: {
                   methodName: methodName,
                   relayAuthority: relayAuthority,
-                  from: from,
-                  to: to,
-                  wallet: walletAddress,
-                  token: tokenAddress,
+                  from: web3utils.toChecksumAddress(from),
+                  to: web3utils.toChecksumAddress(to),
+                  wallet: web3utils.toChecksumAddress(walletAddress),
+                  token: web3utils.toChecksumAddress(tokenAddress),
                   tokens: tokenAmount,
-               //   relayerRewardToken: relayerRewardToken,
                   relayerRewardTokens: relayerRewardTokens,
                   expires: expires,
                   nonce: nonce
@@ -605,5 +606,38 @@ export default class LavaPacketUtils {
 
 
 
+      static async performOffchainSignForLavaPacket(args, web3Plug){
+
+         
+ 
+        
+
+       let chainId = web3Plug.getConnectionState().activeNetworkId
+ 
+ 
+ 
+       const typedData = LavaPacketUtils.getLavaTypedDataFromParams(
+             
+            chainId,  //0x2a for Kovan
+             
+            ...Object.values(  args )  //unpack the args 
+       )
+        console.log('lavapacket  typedData',typedData)
+ 
+        var stringifiedData = JSON.stringify(  typedData );
+
+        
+
+        let signResult = await  EIP712HelperV3.signTypedData( web3Plug.web3, args.from, stringifiedData  )
+        
+        
+        
+        console.log( 'signResult', signResult )  
+
+        return signResult
+
+
+
+  }
 
 }

@@ -94,9 +94,9 @@ export default class PermitUtils {
 
 
 
-  static async performOffchainSignForPermit(args){
+  static async performOffchainSignForPermit(args,web3Plug){
 
-        let web3Plug = args.web3Plug
+         
 
        let myTokenContract = web3Plug.getCustomContract(web3Plug.web3, permissibleTokenABI, args.tokenAddress)
  

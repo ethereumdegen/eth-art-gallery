@@ -128,10 +128,9 @@
 
           <div class="lava-transfer-container  m-4 p-4" v-if="(selectedActionType=='lavatransfer')" v-cloak>
 
-            <div class="subtitle-banner has-background-orange has-text-light"> Approved Balance: {{ selectedActionAsset.approved_balance_formatted }} </div>
-
-            <div class="input-container padding-md">
-            <div class="label">Transfer Tokens</div>
+             
+            <div class=" ">
+            
 
               <p> Generate a signed Lava Transfer Message.  This message can be submitted to the Ethereum network by anyone, at which point the tokens will be transferred to the recipient's account.  </p>
 
@@ -183,7 +182,9 @@
                       </div>
 
                       <div class="whitespace-sm"></div>
-                        <div class="button is-primary btn-action-lava-transfer" v-on:click="actionLavaTransfer"> Sign </div>
+                        
+                         <div class="button inline-block bg-green-500 hover:bg-green-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-on:click="actionSignLavaPacket"> Sign </div>
+           
 
                      </div>
                    <div class="flex-grow">
@@ -244,6 +245,7 @@
 import  PermitUtils from '../../js/eip712/permit-utils.js' 
 import  EIP712HelperV3 from '../../js/eip712/EIP712HelperV3.js' 
 import  EIP712SignPermit from '../../js/eip712/eip712-sign-permit.js'
+import LavaPacketUtils from '../../js/eip712/lavapacket-utils.js'
  
 
 const permissibleTokenABI = require('../../abi/PermissibleToken.json')
@@ -293,8 +295,7 @@ export default {
        
 
         let permitInputData = {
-
-          web3Plug: this.web3Plug,
+ 
           tokenAddress: assetData.address,
           permitFrom: primaryAddress,
           permitTo: lavaContractAddress,
@@ -302,7 +303,7 @@ export default {
           allowed: true,
         }
 
-       let signResult = await PermitUtils.performOffchainSignForPermit( permitInputData )
+       let signResult = await PermitUtils.performOffchainSignForPermit( permitInputData,this.web3Plug )
 
 
        this.permitMetaData = JSON.stringify({
@@ -364,8 +365,40 @@ export default {
 
       },
 
-      actionLavaTransfer(){
-          console.log('actionLavaTransfer!!')
+      async actionSignLavaPacket(){
+          console.log('SignLavaPacket!!')
+
+
+
+        let assetData = this.selectedActionAsset
+
+        let allAccounts = await this.web3Plug.getConnectedAccounts() 
+        let primaryAddress =  window.web3.utils.toChecksumAddress( allAccounts[0] ) 
+ 
+        let contractData = this.web3Plug.getContractDataForActiveNetwork();
+        let lavaContractAddress = contractData['LavaWallet'].address
+       
+
+        let lavaPacketInputData = {
+          method:'transfer',
+          relayAuthority: "0x0000000000000000000000000000000000000000", 
+          from: primaryAddress,
+          to: this.transferTokenRecipient,
+          walletAddress: lavaContractAddress,
+          tokenAddress: assetData.address,
+          tokenAmount:  this.transferTokenQuantity,
+          relayerReward:  0,
+          expires: 0,
+          nonce:  LavaPacketUtils.generateRandomNonce()
+        }
+ 
+
+           console.log('lavaPacketInputData',lavaPacketInputData)
+
+        let signResult = await LavaPacketUtils.performOffchainSignForLavaPacket(lavaPacketInputData, this.web3Plug)
+          console.log('signResult',signResult)
+
+
       }
   }
 }
