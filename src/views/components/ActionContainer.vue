@@ -104,7 +104,7 @@
                 </div>
                 <div class="  flex-grow">
                     <div> Meta Packet </div> 
-                    <textarea></textarea>
+                    <textarea class="text-black" v-model="permitMetaData"></textarea>
                      </div>
                 <div class="  flex-grow">
                     
@@ -255,6 +255,7 @@ export default {
 
         selectedActionType: 'permit' ,
         permitTokenQuantity:null,
+        permitMetaData: {},
 
 
         transferTokenQuantity:null,
@@ -283,71 +284,33 @@ export default {
 
         console.log('addr', primaryAddress)
 
-         //let contractData = this.web3Plug.getContractDataForActiveNetwork()
+        let contractData = this.web3Plug.getContractDataForActiveNetwork();
+        let lavaContractAddress = contractData['LavaWallet'].address
+       
 
-        let myTokenContract = this.web3Plug.getCustomContract(window.web3, permissibleTokenABI,  assetData.address)
- 
+        let permitInputData = {
 
-    /*
+          web3Plug: this.web3Plug,
+          tokenAddress: assetData.address,
+          permitFrom: primaryAddress,
+          permitTo: lavaContractAddress,
+          expires: 0,
+          allowed: true,
+        }
 
- // EIP712 niceties
-    bytes32 public DOMAIN_SEPARATOR;
-    // bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
-    bytes32 public constant PERMIT_TYPEHASH = 0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb;
-
-
-     require(_chainId != 0);
-        DOMAIN_SEPARATOR = keccak256(
-            abi.encode(
-                keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
-                keccak256(bytes(_name)),
-                keccak256(bytes(version)),
-                _chainId,
-                address(this)
-            )
-        );*/
-
-        /*
-       bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                DOMAIN_SEPARATOR,
-                keccak256(abi.encode(PERMIT_TYPEHASH, _holder, _spender, _nonce, _expiry, _allowed))
-            )
-        );
-
-        */
-
-       let nameOfToken = await myTokenContract.methods.name().call()
-
-       let chainId = this.web3Plug.getConnectionState().activeNetworkId
-
-       let expirationTime = 0;
-
-       let currentPermitNonce = await myTokenContract.methods.nonces(primaryAddress).call()
-        console.log('currentPermitNonce',currentPermitNonce)
-
-       let inputDataArray = [primaryAddress,primaryAddress, currentPermitNonce,expirationTime,true]
-
-       const typedData = PermitUtils.getPermitTypedDataFromParams(
-            nameOfToken,
-            chainId,  //0x2a for Kovan
-            window.web3.utils.toChecksumAddress(assetData.address),  //IMPORTANT 
-
-            ...inputDataArray  //unpack the array 
-       )
-        console.log('permit typedData',typedData)
- 
-        var stringifiedData = JSON.stringify(  typedData );
-
-        let permitTypedDataHash = PermitUtils.getPermitTypedDataHash(typedData)
+       let signResult = await PermitUtils.performOffchainSignForPermit( permitInputData )
 
 
+       this.permitMetaData = JSON.stringify({
 
-        let signResult = await  EIP712HelperV3.signTypedData( window.web3, primaryAddress, stringifiedData  )
-        console.log( 'signResult', signResult )  
-            
-
+         from: permitInputData.permitFrom,
+         to: permitInputData.permitTo,
+         tokenAddress: permitInputData.tokenAddress,
+         expires: permitInputData.expires,
+         allowed: permitInputData.allowed,
+                  
+         signature: signResult.signature
+       })
         
 
 

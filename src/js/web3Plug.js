@@ -86,6 +86,9 @@ export default class Web3Plug {
 
     if (window.ethereum) {
          window.web3 = new Web3(window.ethereum);
+
+          this.web3 = window.web3 
+
          window.ethereum.enable();
 
          window.ethereum.on('accountsChanged', (accounts) => {

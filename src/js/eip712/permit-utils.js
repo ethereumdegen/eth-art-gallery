@@ -6,6 +6,10 @@
 const web3utils = require('web3').utils
 const ethUtil = require('ethereumjs-util');
 
+
+const permissibleTokenABI = require('../../abi/PermissibleToken.json')
+ 
+
 import EIP712HelperV3 from './EIP712HelperV3'
 
 export default class PermitUtils {
@@ -88,5 +92,48 @@ export default class PermitUtils {
       return typedData;
   }
 
+
+
+  static async performOffchainSignForPermit(args){
+
+        let web3Plug = args.web3Plug
+
+       let myTokenContract = web3Plug.getCustomContract(web3Plug.web3, permissibleTokenABI, args.tokenAddress)
+ 
+ 
+       let nameOfToken = await myTokenContract.methods.name().call()
+
+       let chainId = web3Plug.getConnectionState().activeNetworkId
+
+       let expirationTime = 0;
+
+       let currentPermitNonce = await myTokenContract.methods.nonces(args.permitFrom).call()
+        console.log('currentPermitNonce',currentPermitNonce)
+
+       let inputDataArray = [args.permitFrom,args.permitTo, currentPermitNonce,args.expires,args.allowed]
+
+       const typedData = PermitUtils.getPermitTypedDataFromParams(
+            nameOfToken,
+            chainId,  //0x2a for Kovan
+            window.web3.utils.toChecksumAddress(args.tokenAddress),  //IMPORTANT 
+
+            ...inputDataArray  //unpack the array 
+       )
+        console.log('permit typedData',typedData)
+ 
+        var stringifiedData = JSON.stringify(  typedData );
+
+        let permitTypedDataHash = PermitUtils.getPermitTypedDataHash(typedData)
+
+
+
+        let signResult = await  EIP712HelperV3.signTypedData( web3Plug.web3, args.permitFrom, stringifiedData  )
+        console.log( 'signResult', signResult )  
+            
+        return signResult
+
+
+
+  }
 
 }

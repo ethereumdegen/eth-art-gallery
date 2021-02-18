@@ -78,6 +78,16 @@ export default class EIP712HelperV3{
     }
 
 
+    static signatureToVRS(signature){
+        const r = "0x" + signature.substring(0, 64);
+        const s = "0x" + signature.substring(64, 128);
+        const v = parseInt(signature.substring(128, 130), 16); 
+
+        return {v:v,r:r,s:s}
+
+    }
+
+
     static async signTypedData(web3, signer,data )
     {
       var result = await new Promise(async resolve => {
