@@ -7,7 +7,7 @@
                   <td class="has-text-centered"> Icon </td>
                   <td class="has-text-centered"> Name </td>
                   <td class="has-text-centered"> Balance </td>
-
+                  <td class="has-text-centered"> Approved </td>
                 </tr>
               </thead>
               <tbody >
@@ -20,6 +20,7 @@
                 <td class="row-cell has-text-centered icon-url py-6"><img  v-bind:src="item.imgurl" height="42" width="42" ></img></td>
                 <td class="row-cell has-text-centered token-name">{{item.name}}</td>
                   <td class="row-cell has-text-centered"><div class="has-text-centered token-balance">{{item.wallet_balance_formatted}}</div>  </td>
+    <td class="row-cell has-text-centered"><div class="has-text-centered token-balance">{{item.amount_approved_formatted}}</div>  </td>
  
               </tr>
             </tbody>

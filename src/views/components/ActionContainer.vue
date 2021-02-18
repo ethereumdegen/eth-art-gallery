@@ -97,14 +97,20 @@
               <div class="flex flex-row">
                 <div class=" flex-grow ">
                   <div class="form-group">
-                      <input type="text" class="  h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline " v-model="permitTokenQuantity" placeholder="token amount">
-                      <div class="button inline-block bg-green-500 hover:bg-green-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-on:click="actionPermitTokens"> Permit </div>
+                      <input type="text" class=" hidden h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline " v-model="permitTokenQuantity" placeholder="token amount">
+                      <div class="button inline-block bg-green-500 hover:bg-green-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-on:click="actionPermitTokens"> Permit All </div>
            
                   </div>
                 </div>
                 <div class="  flex-grow">
-                     <div class="is-size-6"> Balance: {{ selectedActionAsset.wallet_balance_formatted }} </div>
-                    <div class="is-size-6"> Quantity Approved: {{ selectedActionAsset.approved_balance_formatted }} </div>
+                    <div> Meta Packet </div> 
+                    <textarea></textarea>
+                     </div>
+                <div class="  flex-grow">
+                    
+
+                      <div class="button inline-block bg-purple-500 hover:bg-purple-700 text-white font-bold m-2 py-2 px-4 rounded cursor-pointer" v-on:click="actionPermitTokens"> Submit Meta Tx </div>
+           
                          </div>
               </div>
             </div>
