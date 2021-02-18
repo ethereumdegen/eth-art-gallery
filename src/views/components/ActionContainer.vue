@@ -231,10 +231,13 @@
 
 import  PermitUtils from '../../js/eip712/permit-utils.js' 
 import  EIP712HelperV3 from '../../js/eip712/EIP712HelperV3.js' 
-
+import  EIP712SignPermit from '../../js/eip712/eip712-sign-permit.js'
+ 
 
 const permissibleTokenABI = require('../../abi/PermissibleToken.json')
- 
+ const ethUtil = require('ethereumjs-util')
+
+
 export default {
   name: 'ActionContainer',
   props: ['shouldRender','selectedActionAsset', 'web3Plug'],
@@ -270,7 +273,7 @@ export default {
         let assetData = this.selectedActionAsset
 
         let allAccounts = await this.web3Plug.getConnectedAccounts() 
-        let primaryAddress = allAccounts[0]
+        let primaryAddress =  window.web3.utils.toChecksumAddress( allAccounts[0] ) 
 
         console.log('addr', primaryAddress)
 
@@ -311,16 +314,14 @@ export default {
 
        let currentPermitNonce = 0 
 
+       let inputDataArray = [primaryAddress,primaryAddress, 1,0,true]
+
        const typedData = PermitUtils.getPermitTypedDataFromParams(
             'TEST',
             0x2a,  //0x2a 
-            assetData.address,
+            window.web3.utils.toChecksumAddress(assetData.address),  //IMPORTANT 
 
-            primaryAddress,
-            primaryAddress,
-            currentPermitNonce+1,  //need to read nonces of this holder from contract 
-            0,
-            true
+            ...inputDataArray  //unpack the array 
        )
         console.log('permit typedData',typedData)
  
@@ -329,8 +330,52 @@ export default {
  
 
 
-        let result = await  EIP712HelperV3.signTypedData( window.web3, primaryAddress, stringifiedData  )
-        console.log( result )
+
+        let signature = await  EIP712HelperV3.signTypedData( window.web3, primaryAddress, stringifiedData  )
+        console.log( signature )  
+            
+
+        let signHash = EIP712SignPermit.signHash(typedData)
+
+            
+        //let actualDomainSeparator = 0x2c8b239014107b10523ebb8bfbdf54768e1d0c91dc7cb9e32528db4340122ebf
+ 
+
+        console.log('domainseparator',ethUtil.bufferToHex(EIP712SignPermit.structHash('EIP712Domain', typedData.domain)))
+         console.log('hash2',ethUtil.bufferToHex(EIP712SignPermit.structHash(typedData.primaryType, typedData.message)))
+
+
+        //hash2 must be bad 
+
+     
+        console.log('meep signhash ', signHash)
+        
+        
+        //bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
+        
+        let permitTypehash = window.web3.utils.soliditySha3( "Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)" )
+
+             console.log('meep permitTypehash ', permitTypehash) //this is correct 
+
+
+             let HashTwo = window.web3.utils.soliditySha3( permitTypehash, ...inputDataArray     )
+            console.log('hashTwo', HashTwo)
+    /*   
+
+         let digest = web3.sha3( "\x19\x01" + DOMAIN_SEPARATOR + web3.sha3(PERMIT_TYPEHASH, ...inputDataArray   ) )
+
+         console.log(digest)*/
+
+
+           window.web3.eth.personal.ecRecover(stringifiedData,signature, function(error, result){
+                    if(!error)
+                        console.log('ecrecover', result)
+                    else
+                        console.error(error);
+                }) 
+
+        //require(_holder == ecrecover(digest, _v, _r, _s));
+
                 
 
 

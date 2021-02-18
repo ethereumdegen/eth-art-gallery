@@ -21,7 +21,10 @@ const types = {
   Permit: permitSchema
 }
 
-function dependencies(primaryType, found = []) {
+export default class EIP712SignPermit{
+ 
+
+  static dependencies(primaryType, found = []) {
   if (found.includes(primaryType)) {
     return found
   }
@@ -30,7 +33,7 @@ function dependencies(primaryType, found = []) {
   }
   found.push(primaryType)
   for (const field of types[primaryType]) {
-    for (const dep of dependencies(field.type, found)) {
+    for (const dep of EIP712SignPermit.dependencies(field.type, found)) {
       if (!found.includes(dep)) {
         found.push(dep)
       }
@@ -39,13 +42,13 @@ function dependencies(primaryType, found = []) {
   return found
 }
 
-function encodeData(primaryType, data) {
+static encodeData(primaryType, data) {
   const encTypes = []
   const encValues = []
 
   // Add typehash
   encTypes.push('bytes32')
-  encValues.push(typeHash(primaryType))
+  encValues.push(EIP712SignPermit.typeHash(primaryType))
 
   // Add field contents
   for (const field of types[primaryType]) {
@@ -69,9 +72,9 @@ function encodeData(primaryType, data) {
   return abi.rawEncode(encTypes, encValues)
 }
 
-function encodeType(primaryType) {
+static encodeType(primaryType) {
   // Get dependencies primary first, then alphabetical
-  let deps = dependencies(primaryType)
+  let deps = EIP712SignPermit.dependencies(primaryType)
   deps = deps.filter(t => t !== primaryType)
   deps = [primaryType].concat(deps.sort())
 
@@ -83,25 +86,25 @@ function encodeType(primaryType) {
   return result
 }
 
-function signHash(typedData) {
+static signHash(typedData) {
   return ethUtil.keccak256(
     Buffer.concat([
       Buffer.from('1901', 'hex'),
-      structHash('EIP712Domain', typedData.domain),
-      structHash(typedData.primaryType, typedData.message)
+      EIP712SignPermit.structHash('EIP712Domain', typedData.domain),
+      EIP712SignPermit.structHash(typedData.primaryType, typedData.message)
     ])
   )
 }
 
-function structHash(primaryType, data) {
-  return ethUtil.keccak256(encodeData(primaryType, data))
+static structHash(primaryType, data) {
+  return ethUtil.keccak256(EIP712SignPermit.encodeData(primaryType, data))
 }
 
-function typeHash(primaryType) {
-  return ethUtil.keccak256(encodeType(primaryType))
+static typeHash(primaryType) {
+  return ethUtil.keccak256(EIP712SignPermit.encodeType(primaryType))
 }
 
-function sign(domain, message, privateKey) {
+static sign(domain, message, privateKey) {
   const typedData = {
     types,
     primaryType: 'Permit',
@@ -116,4 +119,5 @@ function sign(domain, message, privateKey) {
   }
 }
 
-module.exports = sign
+  
+}

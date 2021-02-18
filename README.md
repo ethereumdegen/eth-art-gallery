@@ -6,8 +6,20 @@
 
 
 #### TODO 
+https://www.xdaichain.com/for-developers/developer-resources/meta-transactions
+
+https://kovan.etherscan.io/address/0xf5b71f8d25d3e90b9ec0c08d890853187df4bef4#writeContract
+
+
 //https://github.com/poanetwork/tokenbridge-contracts/tree/master/test/helpers
 integrate eip712-sign-permit
+
+
+1. Make permit work 
+
+
+2. Make lava transfer work 
+
 
 
 
