@@ -1,0 +1,10 @@
+{
+    "delay":9000,
+    "contentURLs":[
+        {"src":"https://api.artblocks.io/generator/9000162","type":"web"},
+        {"src":"https://api.artblocks.io/generator/15000049","type":"web"},
+        {"src":"https://edition-images-cdn-bucket.storage.googleapis.com/network/mainnet/edition/270000/asset.png","type":"image"},
+        {"src":"https://edition-images-cdn-bucket.storage.googleapis.com/network/mainnet/edition/273275/card.gif","type":"image"},
+        {"src":"https://www.larvalabs.com/cryptopunks/cryptopunk1164.png","type":"image"} 
+    ]
+}
