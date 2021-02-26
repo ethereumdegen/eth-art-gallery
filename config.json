@@ -5,6 +5,8 @@
         {"src":"https://api.artblocks.io/generator/15000049","type":"web"},
         {"src":"https://edition-images-cdn-bucket.storage.googleapis.com/network/mainnet/edition/270000/asset.png","type":"image"},
         {"src":"https://edition-images-cdn-bucket.storage.googleapis.com/network/mainnet/edition/273275/card.gif","type":"image"},
+        {"src":"https://lh3.googleusercontent.com/z67MIF6ZBq-lkP_9i1Y2kYSVw1rG_VpPFM3iYnCaQJi2P6IJEh6UHOc7njrwfIbVjegpyso22fXv4AbhXjtYS3s=s992","type":"image"},
+        {"src":"https://lh3.googleusercontent.com/47O9RgutyTfSIW5OKzAVvfOsUcWf_kITy0NaN48ASso_mg1Uut8QqzF12pSPdXlcBvxEsv3edxIsO_LxtOxjkscKoA=s0","type":"image"},
         {"src":"https://www.larvalabs.com/cryptopunks/cryptopunk1164.png","type":"image"} 
     ]
 }
