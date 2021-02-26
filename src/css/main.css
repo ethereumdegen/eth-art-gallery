@@ -1,5 +1,7 @@
 
- 
+ body {
+  margin: 0;
+}
 
 .svg-icon {
   width: 1em;

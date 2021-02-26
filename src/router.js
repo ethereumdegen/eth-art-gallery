@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Wallet from './views/Wallet.vue'
+import Gallery from './views/Gallery.vue'
   
 import NotFound from './views/NotFound.vue'
 
@@ -12,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'wallet',
-      component: Wallet
+      name: 'gallery',
+      component: Gallery
     },
 
      
