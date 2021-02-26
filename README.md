@@ -8,6 +8,7 @@ Set up config.json to your art urls
 
 https://eth-art-gallery.vercel.app/#/ 
 
+
   
 ## How to Run
 1. install node10
@@ -19,3 +20,5 @@ OR
 npm run build && npm run express
 
  
+ 
+ If you like, donate to: infernaltoast.eth
