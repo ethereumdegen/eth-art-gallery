@@ -6,6 +6,8 @@ Local website scrolls through your art.
 
 Set up config.json to your art urls 
 
+https://eth-art-gallery.vercel.app/#/ 
+
   
 ## How to Run
 1. install node10
