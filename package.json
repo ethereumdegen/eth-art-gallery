@@ -1,8 +1,8 @@
 {
-  "name": "MetaWallet",
-  "description": "Meta Transactions Wallet for PermissibleToken",
+  "name": "EthArtGallery",
+  "description": "Gallery to display your NFT art",
   "version": "0.1.2",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,12 +10,8 @@
     "deploy": "node deploy.js",
     "lint": "vue-cli-service lint"
   },
-  "dependencies": {
-    "bignumber.js": "^9.0.0",
-    "core-js": "^2.6.5",
-    "ethereumjs-abi": "^0.6.8",
-    "ethereumjs-util": "^7.0.8",
-    "markdown-it": "^11.0.1",
+  "dependencies": { 
+    "core-js": "^2.6.5", 
     "portal-vue": "^2.1.0",
     "regenerator-runtime": "^0.13.7",
     "sass": "^1.32.7",
