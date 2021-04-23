@@ -3,6 +3,7 @@
     "contentURLs":[
         {"src":"https://api.artblocks.io/generator/9000162","type":"web"},
         {"src":"https://api.artblocks.io/generator/15000049","type":"web"},
+        {"src":"https://media.niftygateway.com/image/upload/v1616442669/Ashley/Xcopy5/GUZZLER_GREEN_-_XCOPY_2089_iefuzj.webp", "type":"web"},
         {"src":"https://edition-images-cdn-bucket.storage.googleapis.com/network/mainnet/edition/270000/asset.png","type":"image"},
         {"src":"https://edition-images-cdn-bucket.storage.googleapis.com/network/mainnet/edition/273275/card.gif","type":"image"},
         {"src":"https://lh3.googleusercontent.com/z67MIF6ZBq-lkP_9i1Y2kYSVw1rG_VpPFM3iYnCaQJi2P6IJEh6UHOc7njrwfIbVjegpyso22fXv4AbhXjtYS3s=s992","type":"image"},
